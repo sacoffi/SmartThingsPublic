@@ -1,9 +1,9 @@
 /**
- * Virtual Thermostat for 3Speed Ceiling Fan Control 
- *  This smartapp provides automatic control of Low, Medium, High speeds of smart fan control device using a
+ * Virtual Thermostat for 3 Speed Ceiling Fan Control 
+ *  This smartapp provides automatic control of Low, Medium, High speeds of a smart fan control device using
  *  any temperature sensor. 
- *  It works best with @ChadCK custom device handler Z-Wave Smart Fan Control located here that is a modified
- *  version from the foundational idea and device handler by @johnconstantelo
+ *  It works best with @ChadCK custom device handler Z-Wave Smart Fan Control (that is a modified
+ *  version from the original idea and device handler by @johnconstantelo) located here:
  *  https://community.smartthings.com/t/z-wave-smart-fan-control-custom-device-type/25558
  *  along with the GE 12730 Z-Wave Smart Fan Control hardware. This smartapp was modified from the SmartThings
  *  Virtual Thermostat code which only allowed for on/off control of a switch.
