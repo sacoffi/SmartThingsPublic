@@ -1,6 +1,6 @@
 /**
 * 
- *  Copyright 2015 SmartThings
+ *  Copyright 2016 
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *  in compliance with the License. You may obtain a copy of the License at:
@@ -11,15 +11,23 @@
  *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
  *  for the specific language governing permissions and limitations under the License.
  *
- *  Virtual Thermostat 2 Stage Modification
+ *  Virtual Thermostat; Ceiling Fan 3-Speed Control
+ *  This smartapp is designed to work best with @ChadCK custom device handler Z-Wave Smart Fan Control 
+ *  along with the GE 12730 Z-Wave Smart Fan Control hardware
  *
- *  Author: SmartThings, modified by dalec for two stages
+ *  Author: Dale Coffing, Stephen Coffing
+ *  Version: 20160504.b
+ *
+ * Change Log
+ * 2016-5-4b cleaned debug logs, removed heat-cool selection, removed multiple stages
+ * 2016-5-3  fixed error on not shutting down 
+ * 
  */
 definition(
-    name: "Virtual Thermostat-2Stage",
+    name: "Virtual Thermostat for 3Speed Ceiling Fan",
     namespace: "dcoffing",
-    author: "SmartThings",
-    description: "Control multiple stages of cooling or heating in conjunction with any temperature sensor.",
+    author: "Dale Coffing",
+    description: "Control a 3 Speed Ceiling Fan in conjunction with any temperature sensor.",
     category: "My Apps",
     iconUrl: "https://s3.amazonaws.com/smartapp-icons/Meta/temp_thermo-switch.png",
     iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Meta/temp_thermo-switch@2x.png"
@@ -29,14 +37,11 @@ preferences {
 	section("Choose a temperature sensor... "){
 		input "sensor", "capability.temperatureMeasurement", title: "Sensor"
 	}
-	section("Select the heater or air conditioner outlet(s)1... "){
-		input "outlets1", "capability.switch", title: "Low Speed", multiple: true
-	}
-	section("Select the heater or air conditioner outlet(s)2... "){
-		input "outlets2", "capability.switch", title: "Medium Speed", multiple: true, required: false
-	}
-    section("Select the heater or air conditioner outlet(s)3... "){
-		input "outlets3", "capability.switch", title: "High Speed", multiple: true, required: false
+    section("Select the Ceiling Fan Control/Dimmer Switch... "){
+			input "FanDimmer", "capability.switchLevel", 
+	             multiple: false, 
+			     title: "Fan Control/Dimmer Switch...", 
+			     required: true
 	}
 	section("Set the desired temperature..."){
 		input "setpoint", "decimal", title: "Set Temp"
@@ -47,12 +52,10 @@ preferences {
 	section("Within this number of minutes..."){
 		input "minutes", "number", title: "Minutes", required: false
 	}
-	section("But never go below (or above if A/C) this value with or without motion..."){
-		input "emergencySetpoint", "decimal", title: "Emer Temp", required: false
-	}
-	section("Select 'heat' for a heater and 'cool' for an air conditioner..."){
-		input "mode", "enum", title: "Heating or cooling?", options: ["heat","cool"]
-	}
+//	section("But never go below (or above if A/C) this value with or without motion..."){
+//		input "emergencySetpoint", "decimal", title: "Emer Temp", required: false
+//	}
+
 }
 
 def installed()
@@ -79,9 +82,9 @@ def temperatureHandler(evt)
 		evaluate(evt.doubleValue, isActive ? setpoint : emergencySetpoint)
 	}
 	else {
-		outlets1.off()
-		outlets2.off()
-        outlets3.off()
+     	FanDimmer.off()
+        FanDimmer.setLevel(0) 
+
 	}
 }
 
@@ -102,49 +105,48 @@ def motionHandler(evt)
 			}
 		}
 		else {
-			outlets1.off()
-			outlets2.off()
-            outlets3.off()
+     	    FanDimmer.off()
+            FanDimmer.setLevel(0) 
+
 		}
 	}
 }
 
 private evaluate(currentTemp, desiredTemp)
 {
-	log.debug "EVALUATE($currentTemp, $desiredTemp)"
-    // threshold is control deadband to prevent unwanted cycling
-    def threshold = 1.0
-    // these are temp differentials desired from setpoint for Medium and High fan speeds
-    def MedDiff = 1.0
-    def HighDiff = 2.0
-	if (mode == "cool") {
-		// air conditioner
-          if (currentTemp - desiredTemp >= threshold + HighDiff) {
+	log.debug "EVALUATE($currentTemp, $desiredTemp, $FanDimmer.currentSwitch)"
+   // these are temp differentials desired from setpoint for Low, Medium, High fan speeds
+    def LowDiff = 1.0 
+    def MedDiff = 2.0
+    def HighDiff = 3.0
+
+          if (currentTemp - desiredTemp >= HighDiff) {
                // turn on fan high speed
-               outlets3.on()
-        }
-          else if  (currentTemp - desiredTemp >= threshold + MedDiff) {
+	           log.debug "HIGH speed($currentTemp, $desiredTemp)"
+               FanDimmer.setLevel(90) 
+         }
+          else if  (currentTemp - desiredTemp >= MedDiff) {
                // turn on fan medium speed
-               outlets2.on()
+	           log.debug "MED speed($currentTemp, $desiredTemp)"
+               FanDimmer.setLevel(60)
         }
-          else if  (currentTemp - desiredTemp >= threshold) {
+               else if  (currentTemp - desiredTemp >= LowDiff) {
                // turn on fan low speed
-               outlets1.on()
-		}
-		else if (desiredTemp - currentTemp >= threshold) {
-			outlets1.off()
+	           log.debug "LOW speed($currentTemp, $desiredTemp)"
+
+               if (FanDimmer.currentSwitch == "off") {  // If fan is OFF protect motor by  
+               	  FanDimmer.setLevel(90)                // starting fan in High speed temporarily then 
+                  FanDimmer.setLevel(30, [delay: 3000]) // change to Low speed after 3 seconds 
+               }
+               else {
+                  FanDimmer.setLevel(30)
+               }
+   		}
+		else if (desiredTemp - currentTemp >= LowDiff) {
+			FanDimmer.off()
+            FanDimmer.setLevel(0) 
 		}
 	}
-	else {
-		// heater
-		if (desiredTemp - currentTemp >= threshold) {
-			outlets1.on()
-		}
-		else if (currentTemp - desiredTemp >= threshold) {
-			outlets1.off()
-		}
-	}
-}
 
 private hasBeenRecentMotion()
 {
