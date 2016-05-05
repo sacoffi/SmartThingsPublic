@@ -1,12 +1,12 @@
 /**
- * Virtual Thermostat for 3-Speed Ceiling Fan Control 
- *  This smartapp provides automatic control of Low, Medium, High speeds of a smart fan control device using
+ * Virtual Thermostat for 3 Speed Ceiling Fan Control 
+ *  This smartapp provides automatic control of Low, Medium, High speeds of smart fan control device using 
  *  any temperature sensor. 
- *  It works best with @ChadCK custom device handler Z-Wave Smart Fan Control (that is a modified
- *  version from the original idea and device handler by @johnconstantelo) located here:
+ *  It works best with @ChadCK custom device handler Z-Wave Smart Fan Control located here
  *  https://community.smartthings.com/t/z-wave-smart-fan-control-custom-device-type/25558
  *  along with the GE 12730 Z-Wave Smart Fan Control hardware. This smartapp was modified from the SmartThings
- *  Virtual Thermostat code which only allowed for on/off control of a switch.
+ *  Virtual Thermostat code which only allowed for on/off control of a switch. 
+ **Thanks to @krlaframboise for his patient help and knowledge in solving poor coding by a first time coder.
  *
  *  Copyright 2016 Dale Coffing
  *
@@ -21,9 +21,11 @@
  *
  *
  *  Author: Dale Coffing
- *  Version: 20160505
+ *  Version: 20160505b
  *
  * Change Log
+ * 2016-5-5b @krlaframboise change to bypasses the temperatureHandler method and calls the evaluate method
+ *           with the current temperature and setpoint setting
  * 2016-5-5  autoMode added for manual override of auto control
  * 2016-5-4b cleaned debug logs, removed heat-cool selection, removed multiple stages
  * 2016-5-3  fixed error on not shutting down, huge shout out to my bro Stephen Coffing in the logic formation 
@@ -35,7 +37,7 @@
  *
  */
 definition(
-    name: "3Speed Ceiling Fan Control",
+    name: "3 Speed Ceiling Fan Control",
     namespace: "dcoffing",
     author: "Dale Coffing",
     description: "Control a 3 Speed Ceiling Fan using Low, Medium, High speeds with any temperature sensor.",
@@ -84,13 +86,16 @@ def updated()
 	if (motion) {
 		subscribe(motion, "motion", motionHandler)
 	}
+    handleTemperature(sensor.currentTemperature)
 }
 
-def temperatureHandler(evt)
-{
+def temperatureHandler(evt){
+    handleTemperature(evt.doubleValue)
+}
+def handleTemperature(temp) {
 	def isActive = hasBeenRecentMotion()
 	if (isActive || emergencySetpoint) {
-		evaluate(evt.doubleValue, isActive ? setpoint : emergencySetpoint)
+		evaluate(temp, isActive ? setpoint : emergencySetpoint)
 	}
 	else {
      	fanDimmer.off()
@@ -125,35 +130,34 @@ def motionHandler(evt)
 
 private evaluate(currentTemp, desiredTemp)
 {
-	log.debug "EVALUATE($currentTemp, $desiredTemp, $fanDimmer.currentSwitch)"
+log.debug "EVALUATE($currentTemp, $desiredTemp, $fanDimmer.currentSwitch)"
    // these are temp differentials desired from setpoint for Low, Medium, High fan speeds
     def LowDiff = 1.0 
     def MedDiff = 2.0
     def HighDiff = 3.0
 	if (autoMode == "Auto") {
-    	if (currentTemp - desiredTemp >= HighDiff) {
+    		if (currentTemp - desiredTemp >= HighDiff) {
         	// turn on fan high speed
-	   	 log.debug "HIGH speed($currentTemp, $desiredTemp)"
-       	 fanDimmer.setLevel(90) 
-         }
-        	else if  (currentTemp - desiredTemp >= MedDiff) {
-            // turn on fan medium speed
-	        log.debug "MED speed($currentTemp, $desiredTemp)"
-            fanDimmer.setLevel(60)
-       		}
-            	else if  (currentTemp - desiredTemp >= LowDiff) {
-               	// turn on fan low speed
-	           	log.debug "LOW speed($currentTemp, $desiredTemp)"
-
-               		if (fanDimmer.currentSwitch == "off") { // if fan is OFF protect motor by  
-               	  	fanDimmer.setLevel(90)                	// starting fan in High speed temporarily then 
-                  	fanDimmer.setLevel(30, [delay: 3000]) 	// change to Low speed after 3 seconds 
-          		}
-               		else {
-                  	fanDimmer.setLevel(30) 	//fan is already running, not necessary to protect motor
-               		}						//set Low speed immediately
+		log.debug "HIGH speed($currentTemp, $desiredTemp)"
+       		fanDimmer.setLevel(90) 
+      		}
+        	    else if  (currentTemp - desiredTemp >= MedDiff) {
+            	    // turn on fan medium speed
+	      	    log.debug "MED speed($currentTemp, $desiredTemp)"
+            	    fanDimmer.setLevel(60)
+       		    }
+            		 else if  (currentTemp - desiredTemp >= LowDiff) {
+              		 // turn on fan low speed
+	           	 log.debug "LOW speed($currentTemp, $desiredTemp)"
+               			if (fanDimmer.currentSwitch == "off") { // if fan is OFF protect motor by  
+               	  		fanDimmer.setLevel(90)                	// starting fan in High speed temporarily then 
+                  		fanDimmer.setLevel(30, [delay: 3000]) 	// change to Low speed after 3 seconds 
+          			}
+               			else {
+                  		fanDimmer.setLevel(30) 	//fan is already running, not necessary to protect motor
+               			}			//set Low speed immediately
    		}
-		else if (desiredTemp - currentTemp >= LowDiff) {	//below setpoint, turn off fan, zero level
+		else if (desiredTemp - currentTemp >= LowDiff) {   //below setpoint, turn off fan, zero level
 			fanDimmer.off()
             fanDimmer.setLevel(0) 
 		}
