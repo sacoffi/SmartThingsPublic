@@ -69,8 +69,8 @@ preferences {
 	section("But run Ceiling Fan above this temperature with or without motion..."){
 		input "emergencySetpoint", "decimal", title: "High Limit Setpoint Temp", required: false
 	}
-	section("Select 'Auto' to enable fan control (defaulted 'Off')..."){
-		input "autoMode", "enum", title: "Enable Ceiling Fan Control?", options: ["Off","Auto"], required: true
+	section("Select 'Auto' to enable thermostat (defaulted 'Off')..."){
+		input "autoMode", "enum", title: "Enable Ceiling Fan Thermostat?", options: ["Off","Auto"], required: true
 	}
     section ("3 Speed Ceiling Fan Thermostat - Ver 0.9c") { }
 }
