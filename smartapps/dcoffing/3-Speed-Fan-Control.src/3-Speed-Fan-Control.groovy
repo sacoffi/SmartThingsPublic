@@ -45,8 +45,7 @@ definition(
     category: "My Apps",
     iconUrl: "http://cdn.device-icons.smartthings.com/Lighting/light24-icn.png",
     iconX2Url: "http://cdn.device-icons.smartthings.com/Lighting/light24-icn@2x.png"
-) // "https://s3.amazonaws.com/smartapp-icons/Meta/temp_thermo-switch.png",
-//"https://s3.amazonaws.com/smartapp-icons/Meta/temp_thermo-switch@2x.png"
+)
 
 preferences {
 	section("Select a temperature sensor to control the fan..."){
