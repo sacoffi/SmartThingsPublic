@@ -38,7 +38,7 @@
  *
  */
 definition(
-    name: "3 Speed Ceiling Fan Control",
+    name: "3 Speed Ceiling Fan Thermostat",
     namespace: "dcoffing",
     author: "Dale Coffing",
     description: "Control a 3 Speed Ceiling Fan using Low, Medium, High speeds with any temperature sensor.",
