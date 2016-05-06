@@ -86,14 +86,14 @@ def updated(){
 	subscribe(sensor, "temperature", temperatureHandler)
 	if (motion) {
 		subscribe(motion, "motion", motionHandler)
-	}											 // @krlaframboise fix for setpoint changes to immediately act.
+	}					// @krlaframboise fix for setpoint changes to immediately act.
     handleTemperature(sensor.currentTemperature) //The change I recommended bypasses the temperatureHandler method 											
-} 												 //and calls the evaluate method with the current temperature and
-												 //setpoint setting. If you want to execute the same code that the                                                
-def temperatureHandler(evt){					 //temperatureHandler method calls, you should break that code into					
-    handleTemperature(evt.doubleValue)			 //a separate method.
-}												 //
-def handleTemperature(temp) {					 //
+} 						 //and calls the evaluate method with the current temperature and
+						//setpoint setting. If you want to execute the same code that the                                                
+def temperatureHandler(evt){			//temperatureHandler method calls, you should break that code into					
+    handleTemperature(evt.doubleValue)		 //a separate method.
+}						//
+def handleTemperature(temp) {			//
 	def isActive = hasBeenRecentMotion()
 	if (isActive || emergencySetpoint) {
 		evaluate(temp, isActive ? setpoint : emergencySetpoint)
