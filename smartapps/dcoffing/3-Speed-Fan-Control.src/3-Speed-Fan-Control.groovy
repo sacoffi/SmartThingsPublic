@@ -72,7 +72,7 @@ preferences {
 	section("Select 'Auto' to enable fan control (defaulted 'Off')..."){
 		input "autoMode", "enum", title: "Enable Ceiling Fan Control?", options: ["Off","Auto"], required: true
 	}
-    section ("3 Speed Ceiling Fan Control - Ver 0.9c") { }
+    section ("3 Speed Ceiling Fan Thermostat - Ver 0.9c") { }
 }
 def installed(){
 	subscribe(sensor, "temperature", temperatureHandler)
