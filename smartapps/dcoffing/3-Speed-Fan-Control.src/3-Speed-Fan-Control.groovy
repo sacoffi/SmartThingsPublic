@@ -21,9 +21,10 @@
  *
  *
  *  Author: Dale Coffing
- *  Version: 0.9c
+ *  Version: 0.9d
  *
  * Change Log
+ * 2016-6-6  minor changes to text, labels, for clarity
  * 2016-5-5c clean code, added current ver section header, allow for multiple fan controllers,
  *           replace icons to ceiling fan, modify name from Control to Thermostat
  * 2016-5-5b @krlaframboise change to bypasses the temperatureHandler method and calls the evaluate method
@@ -72,7 +73,7 @@ preferences {
 	section("Select 'Auto' to enable thermostat (defaulted 'Off')..."){
 		input "autoMode", "enum", title: "Enable Ceiling Fan Thermostat?", options: ["Off","Auto"], required: true
 	}
-    section ("3 Speed Ceiling Fan Thermostat - Ver 0.9c") { }
+    section ("3 Speed Ceiling Fan Thermostat - Ver 0.9d") { }
 }
 def installed(){
 	subscribe(sensor, "temperature", temperatureHandler)
