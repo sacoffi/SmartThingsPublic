@@ -21,10 +21,10 @@
  *
  *
  *  Author: Dale Coffing
- *  Version: 0.9d
+ *  Version: 0.9e
  *
  * Change Log
- * 2016-6-6  minor changes to text, labels, for clarity
+ * 2016-6-6  minor changes to text, labels, for clarity, (e)default to Yes-AUTO for thermostat mode
  * 2016-5-5c clean code, added current ver section header, allow for multiple fan controllers,
  *           replace icons to ceiling fan, modify name from Control to Thermostat
  * 2016-5-5b @krlaframboise change to bypasses the temperatureHandler method and calls the evaluate method
@@ -67,13 +67,13 @@ preferences {
 	section("Within this number of minutes..."){
 		input "minutes", "number", title: "Minutes", required: false
 	}
-	section("But run Ceiling Fan above this temperature with or without motion..."){
+	section("But run Ceiling Fan above this high limit temperature with or without motion..."){
 		input "emergencySetpoint", "decimal", title: "High Limit Setpoint Temp", required: false
 	}
-	section("Select 'Auto' to enable thermostat (defaulted 'Off')..."){
-		input "autoMode", "enum", title: "Enable Ceiling Fan Thermostat?", options: ["Off","Auto"], required: true
+	section("Select Thermostat mode desired. (defaulted 'Yes-AUTO')..."){
+		input "autoMode", "enum", title: "Enable Ceiling Fan Thermostat?", options: ["No-OFF","Yes-AUTO"], description: "Yes-AUTO", required: false
 	}
-    section ("3 Speed Ceiling Fan Thermostat - Ver 0.9d") { }
+   section ("3 Speed Ceiling Fan Thermostat - Ver 0.9e") { }
 }
 def installed(){
 	subscribe(sensor, "temperature", temperatureHandler)
@@ -134,7 +134,7 @@ log.debug "EVALUATE($currentTemp, $desiredTemp, $fanDimmer.currentSwitch)"
     def LowDiff = 1.0 
     def MedDiff = 2.0
     def HighDiff = 3.0
-	if (autoMode == "Auto") {
+	if (autoMode == "YES-Auto") {
     		if (currentTemp - desiredTemp >= HighDiff) {
         	// turn on fan high speed
 		log.debug "HIGH speed($currentTemp, $desiredTemp)"
@@ -160,7 +160,7 @@ log.debug "EVALUATE($currentTemp, $desiredTemp, $fanDimmer.currentSwitch)"
 			fanDimmer.off()
             fanDimmer.setLevel(0) 
 		}
-//	else {  //bypassing automatic control due to autoMode in OFF
+//	else {  //bypassing automatic control due to autoMode in NO-Off
 //		 }
 	}
 }
