@@ -24,7 +24,7 @@
  *  Version: 0.9c
  *
  * Change Log
- * 2016-5-5c clean code, added current ver section header, allow for multiple fan controllers 
+ * 2016-5-5c clean code, added current ver section header, allow for multiple fan controllers, ceiling fan icon
  * 2016-5-5b @krlaframboise change to bypasses the temperatureHandler method and calls the evaluate method
  *           with the current temperature and setpoint setting
  * 2016-5-5  autoMode added for manual override of auto control
