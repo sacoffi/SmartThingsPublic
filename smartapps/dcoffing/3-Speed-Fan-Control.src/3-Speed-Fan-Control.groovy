@@ -6,7 +6,7 @@
  *  https://community.smartthings.com/t/z-wave-smart-fan-control-custom-device-type/25558
  *  along with the GE 12730 Z-Wave Smart Fan Control hardware. This smartapp was modified from the SmartThings
  *  Virtual Thermostat code which only allowed for on/off control of a switch. 
- **Thanks to @krlaframboise for his patient help and knowledge in solving poor coding by a first time coder.
+ *  Thanks to @krlaframboise for his patient help and knowledge in solving poor coding by a first time coder.
  *
  *  Copyright 2016 Dale Coffing
  *
@@ -21,9 +21,10 @@
  *
  *
  *  Author: Dale Coffing
- *  Version: 20160505b
+ *  Version: 0.9c
  *
  * Change Log
+ * 2016-5-5c clean code, added current ver section header, allow for multiple fan controllers 
  * 2016-5-5b @krlaframboise change to bypasses the temperatureHandler method and calls the evaluate method
  *           with the current temperature and setpoint setting
  * 2016-5-5  autoMode added for manual override of auto control
@@ -42,70 +43,68 @@ definition(
     author: "Dale Coffing",
     description: "Control a 3 Speed Ceiling Fan using Low, Medium, High speeds with any temperature sensor.",
     category: "My Apps",
-    iconUrl: "https://s3.amazonaws.com/smartapp-icons/Meta/temp_thermo-switch.png",
-    iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Meta/temp_thermo-switch@2x.png"
-)
+    iconUrl: "http://cdn.device-icons.smartthings.com/Lighting/light24-icn.png",
+    iconX2Url: "http://cdn.device-icons.smartthings.com/Lighting/light24-icn@2x.png"
+) // "https://s3.amazonaws.com/smartapp-icons/Meta/temp_thermo-switch.png",
+//"https://s3.amazonaws.com/smartapp-icons/Meta/temp_thermo-switch@2x.png"
 
 preferences {
-	section("Choose a temperature sensor..."){
+	section("Select a temperature sensor to control the fan..."){
 		input "sensor", "capability.temperatureMeasurement",
-        	multiple:false, title: "Sensor", required: true
+        	multiple:false, title: "Temperature Sensor", required: true 
 	}
-    section("Select the Ceiling Fan Control/Dimmer..."){
+    section("Select the fan control hardware(s)..."){
 		input "fanDimmer", "capability.switchLevel", 
-	    	multiple: false, title: "Fan Control/Dimmer Switch...", required: true
+	    	multiple: true, title: "Fan Control device(s)", required: true
 	}
-	section("Set the desired room setpoint temperature..."){
-		input "setpoint", "decimal", title: "Set Temp"
+	section("Enter the desired room temperature (ie 72.5)..."){
+		input "setpoint", "decimal", title: "Room Setpoint Temp"
 	}
 	section("When there's been movement from (optional, leave blank to not require motion)..."){
-		input "motion", "capability.motionSensor", title: "Motion", required: false
+		input "motion", "capability.motionSensor", title: "Select Motion device", required: false
 	}
 	section("Within this number of minutes..."){
 		input "minutes", "number", title: "Minutes", required: false
 	}
-	section("But never go above this temperature value with or without motion..."){
-		input "emergencySetpoint", "decimal", title: "Emer Temp", required: false
+	section("But run Ceiling Fan above this temperature with or without motion..."){
+		input "emergencySetpoint", "decimal", title: "High Limit Setpoint Temp", required: false
 	}
-	section("Select 'Auto' to enable control ('Off' is default)..."){
+	section("Select 'Auto' to enable fan control (defaulted 'Off')..."){
 		input "autoMode", "enum", title: "Enable Ceiling Fan Control?", options: ["Off","Auto"], required: true
 	}
+    section ("3 Speed Ceiling Fan Control - Ver 0.9c") { }
 }
-def installed()
-{
+def installed(){
 	subscribe(sensor, "temperature", temperatureHandler)
 	if (motion) {
 		subscribe(motion, "motion", motionHandler)
 	}
 }
 
-def updated()
-{
+def updated(){
 	unsubscribe()
 	subscribe(sensor, "temperature", temperatureHandler)
 	if (motion) {
 		subscribe(motion, "motion", motionHandler)
-	}
-    handleTemperature(sensor.currentTemperature)
-}
-
-def temperatureHandler(evt){
-    handleTemperature(evt.doubleValue)
-}
-def handleTemperature(temp) {
+	}											 // @krlaframboise fix for setpoint changes to immediately act.
+    handleTemperature(sensor.currentTemperature) //The change I recommended bypasses the temperatureHandler method 											
+} 												 //and calls the evaluate method with the current temperature and
+												 //setpoint setting. If you want to execute the same code that the                                                
+def temperatureHandler(evt){					 //temperatureHandler method calls, you should break that code into					
+    handleTemperature(evt.doubleValue)			 //a separate method.
+}												 //
+def handleTemperature(temp) {					 //
 	def isActive = hasBeenRecentMotion()
 	if (isActive || emergencySetpoint) {
 		evaluate(temp, isActive ? setpoint : emergencySetpoint)
 	}
 	else {
      	fanDimmer.off()
-        fanDimmer.setLevel(0) 
-
+        fanDimmer.setLevel(0)
 	}
 }
 
-def motionHandler(evt)
-{
+def motionHandler(evt){
 	if (evt.value == "active") {
 		def lastTemp = sensor.currentTemperature
 		if (lastTemp != null) {
@@ -122,8 +121,7 @@ def motionHandler(evt)
 		}
 		else {
      	    fanDimmer.off()
-            fanDimmer.setLevel(0) 
-
+            fanDimmer.setLevel(0)
 		}
 	}
 }
