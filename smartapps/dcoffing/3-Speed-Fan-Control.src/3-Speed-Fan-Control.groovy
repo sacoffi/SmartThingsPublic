@@ -21,10 +21,10 @@
  *
  *
  *  Author: Dale Coffing
- *  Version: 0.9e
+ *  Version: 0.9e ^^^
  *
  * Change Log
- * 2016-6-6  minor changes to text, labels, for clarity, (e)default to Yes-AUTO for thermostat mode
+ * 2016-6-6  minor changes to text, labels, for clarity, (^^^e)default to NO-Manual for thermostat mode 
  * 2016-5-5c clean code, added current ver section header, allow for multiple fan controllers,
  *           replace icons to ceiling fan, modify name from Control to Thermostat
  * 2016-5-5b @krlaframboise change to bypasses the temperatureHandler method and calls the evaluate method
@@ -70,10 +70,10 @@ preferences {
 	section("But run Ceiling Fan above this high limit temperature with or without motion..."){
 		input "emergencySetpoint", "decimal", title: "High Limit Setpoint Temp", required: false
 	}
-	section("Select Thermostat mode desired. (defaulted 'Yes-AUTO')..."){
-		input "autoMode", "enum", title: "Enable Ceiling Fan Thermostat?", options: ["No-OFF","Yes-AUTO"], description: "Yes-AUTO", required: false
+	section("Select Thermostat mode desired (defaulted 'Manual')..."){
+		input "autoMode", "enum", title: "Enable Ceiling Fan Thermostat?", options: ["NO-Manual","YES-Auto"], required: true
 	}
-   section ("3 Speed Ceiling Fan Thermostat - Ver 0.9e") { }
+    section ("3 Speed Ceiling Fan Thermostat - Ver 0.9e^^^") { }
 }
 def installed(){
 	subscribe(sensor, "temperature", temperatureHandler)
@@ -129,40 +129,45 @@ def motionHandler(evt){
 
 private evaluate(currentTemp, desiredTemp)
 {
-log.debug "EVALUATE($currentTemp, $desiredTemp, $fanDimmer.currentSwitch)"
+log.debug "EVALUATE($currentTemp, $desiredTemp, $fanDimmer.currentSwitch, $fanDimmer.currentLevel, $autoMode)"
    // these are temp differentials desired from setpoint for Low, Medium, High fan speeds
     def LowDiff = 1.0 
     def MedDiff = 2.0
     def HighDiff = 3.0
 	if (autoMode == "YES-Auto") {
-    		if (currentTemp - desiredTemp >= HighDiff) {
+    	if (currentTemp - desiredTemp >= HighDiff) {
         	// turn on fan high speed
-		log.debug "HIGH speed($currentTemp, $desiredTemp)"
        		fanDimmer.setLevel(90) 
+            log.debug "HIGH speed($currentTemp, $desiredTemp, $fanDimmer.currentLevel)"
       		}
         	    else if  (currentTemp - desiredTemp >= MedDiff) {
             	    // turn on fan medium speed
-	      	    log.debug "MED speed($currentTemp, $desiredTemp)"
             	    fanDimmer.setLevel(60)
+                    log.debug "MED speed($currentTemp, $desiredTemp, $fanDimmer.currentLevel)"
        		    }
             		 else if  (currentTemp - desiredTemp >= LowDiff) {
-              		 // turn on fan low speed
-	           	 log.debug "LOW speed($currentTemp, $desiredTemp)"
+              		    // turn on fan low speed
                			if (fanDimmer.currentSwitch == "off") { // if fan is OFF protect motor by  
-               	  		fanDimmer.setLevel(90)                	// starting fan in High speed temporarily then 
-                  		fanDimmer.setLevel(30, [delay: 3000]) 	// change to Low speed after 3 seconds 
+               	  		   fanDimmer.setLevel(90)                	// starting fan in High speed temporarily then 
+                  		   fanDimmer.setLevel(30, [delay: 3000]) 	// change to Low speed after 3 seconds
+                           log.debug "LOW speed after HI3secs($currentTemp, $desiredTemp, $fanDimmer.currentLevel)"
           			}
                			else {
-                  		fanDimmer.setLevel(30) 	//fan is already running, not necessary to protect motor
-               			}			//set Low speed immediately
+                  		   fanDimmer.setLevel(30) 	//fan is already running, not necessary to protect motor
+               			   }			           //set Low speed immediately
+                           log.debug "LOW speed immediately($currentTemp, $desiredTemp, $fanDimmer.currentLevel)"
+
    		}
 		else if (desiredTemp - currentTemp >= LowDiff) {   //below setpoint, turn off fan, zero level
-			fanDimmer.off()
-            fanDimmer.setLevel(0) 
+            fanDimmer.setLevel(0) // this is not executing a Level change to zero?
+            fanDimmer.off()
+            log.debug "below SP+Diff ($currentTemp, $desiredTemp, $fanDimmer.currentLevel)"
 		}
-//	else {  //bypassing automatic control due to autoMode in NO-Off
-//		 }
+	else {       //bypassing automatic control due to autoMode in OFF
+         log.debug "autoMode YES-MANUAL? else OFF($currentTemp, $desiredTemp,$fanDimmer.currentLevel, $autoMode)"
+		 }       //and fan remains at last commanded setLevel
 	}
+  log.debug "If autoMode NO-Manual($currentTemp, $desiredTemp, $fanDimmer.currentLevel)"
 }
 private hasBeenRecentMotion()
 {
