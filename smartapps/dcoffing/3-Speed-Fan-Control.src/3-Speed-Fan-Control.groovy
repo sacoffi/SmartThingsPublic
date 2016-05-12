@@ -21,10 +21,11 @@
  *
  *
  *  Author: Dale Coffing
- *  Version: 0.9e ^^^
+ *  Version: 0.9f
  *
  * Change Log
- * 2016-6-6  minor changes to text, labels, for clarity, (^^^e)default to NO-Manual for thermostat mode 
+ * 2016-5-12 added new icons for 3SFC
+ * 2016-5-6  minor changes to text, labels, for clarity, (^^^e)default to NO-Manual for thermostat mode 
  * 2016-5-5c clean code, added current ver section header, allow for multiple fan controllers,
  *           replace icons to ceiling fan, modify name from Control to Thermostat
  * 2016-5-5b @krlaframboise change to bypasses the temperatureHandler method and calls the evaluate method
@@ -45,8 +46,8 @@ definition(
     author: "Dale Coffing",
     description: "Control a 3 Speed Ceiling Fan using Low, Medium, High speeds with any temperature sensor.",
     category: "My Apps",
-    iconUrl: "http://cdn.device-icons.smartthings.com/Lighting/light24-icn.png",
-    iconX2Url: "http://cdn.device-icons.smartthings.com/Lighting/light24-icn@2x.png"
+    iconUrl: "https://github.com/dcoffing/SmartThingsPublic/blob/master/smartapps/dcoffing/3-Speed-Fan-Control.src/3sfc.png",
+    iconX2Url: "https://github.com/dcoffing/SmartThingsPublic/blob/master/smartapps/dcoffing/3-Speed-Fan-Control.src/3sfc@2x.png"
 )
 
 preferences {
@@ -73,7 +74,7 @@ preferences {
 	section("Select Thermostat mode desired (defaulted 'Manual')..."){
 		input "autoMode", "enum", title: "Enable Ceiling Fan Thermostat?", options: ["NO-Manual","YES-Auto"], required: true
 	}
-    section ("3 Speed Ceiling Fan Thermostat - Ver 0.9e^^^") { }
+    section ("3 Speed Ceiling Fan Thermostat - Ver 0.9f") { }
 }
 def installed(){
 	subscribe(sensor, "temperature", temperatureHandler)
