@@ -24,7 +24,7 @@
  *  Version: 0.9f
  *
  * Change Log
- * 2016-5-12 added new icons for 3SFC
+ * 2016-5-12 added new icons for 3SFC, remove multiple fan control devices
  * 2016-5-6  minor changes to text, labels, for clarity, (^^^e)default to NO-Manual for thermostat mode 
  * 2016-5-5c clean code, added current ver section header, allow for multiple fan controllers,
  *           replace icons to ceiling fan, modify name from Control to Thermostat
@@ -55,9 +55,9 @@ preferences {
 		input "sensor", "capability.temperatureMeasurement",
         	multiple:false, title: "Temperature Sensor", required: true 
 	}
-    section("Select the fan control hardware(s)..."){
+    section("Select the fan control hardware..."){
 		input "fanDimmer", "capability.switchLevel", 
-	    	multiple: true, title: "Fan Control device(s)", required: true
+	    	multiple:false, title: "Fan Control device", required: true
 	}
 	section("Enter the desired room temperature (ie 72.5)..."){
 		input "setpoint", "decimal", title: "Room Setpoint Temp"
