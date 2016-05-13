@@ -6,7 +6,7 @@
  *  https://community.smartthings.com/t/z-wave-smart-fan-control-custom-device-type/25558
  *  along with the GE 12730 Z-Wave Smart Fan Control hardware. This smartapp was modified from the SmartThings
  *  Virtual Thermostat code which only allowed for on/off control of a switch. 
- *  Thanks to @krlaframboise for his patient help and knowledge in solving poor coding by a first time coder.
+ *  Thanks to @krlaframboise for his patient help and knowledge in solving issues for a first time coder.
  *
  *  Copyright 2016 Dale Coffing
  *
@@ -23,8 +23,8 @@
  *  Author: Dale Coffing
  *  Version: 0.9f
  *
- * Change Log
- * 2016-5-12 added new icons for 3SFC, remove multiple fan control devices
+ *   * Change Log
+ * 2016-5-12 added new icons for 3SFC, splash text color in 3SFC@2x-c.png
  * 2016-5-6  minor changes to text, labels, for clarity, (^^^e)default to NO-Manual for thermostat mode 
  * 2016-5-5c clean code, added current ver section header, allow for multiple fan controllers,
  *           replace icons to ceiling fan, modify name from Control to Thermostat
@@ -46,8 +46,9 @@ definition(
     author: "Dale Coffing",
     description: "Control a 3 Speed Ceiling Fan using Low, Medium, High speeds with any temperature sensor.",
     category: "My Apps",
-    iconUrl: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-Speed-Fan-Control.src/3sfc.png", 
-    iconX2Url: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-Speed-Fan-Control.src/3sfc@2x.png",
+    iconUrl: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-Speed-Fan-Control.src/3sfc-c.png", 
+    iconX2Url: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-Speed-Fan-Control.src/3sfc@2x-c.png",
+
 )
 
 preferences {
@@ -71,7 +72,7 @@ preferences {
 	section("But run Ceiling Fan above this high limit temperature with or without motion..."){
 		input "emergencySetpoint", "decimal", title: "High Limit Setpoint Temp", required: false
 	}
-	section("Select Thermostat mode desired (defaulted 'Manual')..."){
+	section("Select operating mode desired (defaulted 'Manual')..."){
 		input "autoMode", "enum", title: "Enable Ceiling Fan Thermostat?", options: ["NO-Manual","YES-Auto"], required: true
 	}
     section ("3 Speed Ceiling Fan Thermostat - Ver 0.9f") { }
@@ -188,3 +189,4 @@ private hasBeenRecentMotion()
 	}
 	isActive
 }
+
