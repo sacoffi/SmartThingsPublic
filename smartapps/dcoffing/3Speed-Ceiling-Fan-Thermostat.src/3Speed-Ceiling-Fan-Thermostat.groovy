@@ -74,8 +74,8 @@ preferences {
 	section("Within this number of minutes..."){
 		input "minutes", "number", title: "Minutes", required: false
 	}
-	section("Select ceiling fan operating mode desired..."){
-		input "autoMode", "enum", title: "Enable Ceiling Fan Thermostat?", options: ["NO-Manual","YES-Auto"], required: true
+	section("Select ceiling fan operating mode desired (default to 'YES-Auto'..."){
+		input "autoMode", "enum", title: "Enable Ceiling Fan Thermostat?", options: ["NO-Manual","YES-Auto"], required: false
 	}
     section ("3 Speed Ceiling Fan Thermostat - Ver 1.0.20160514") { }
 }
@@ -136,13 +136,13 @@ private evaluate(currentTemp, desiredTemp)
 {
 log.debug "EVALUATE($currentTemp, $desiredTemp, $fanDimmer.currentSwitch, $fanDimmer.currentLevel, $autoMode, $fanDiffTemp)"
    // these are temp differentials desired from setpoint for Low, Medium, High fan speeds
-	def fanDiffTempValue = (settings.fanDiffTemp != null && settings.fanDiffTemp != "") ? settings.fanDiffTemp : 1.0
-       
+	def fanDiffTempValue = (settings.fanDiffTemp != null && settings.fanDiffTemp != "") ? settings.fanDiffTemp : 1.0 //if user doesn't select Fan Diff Temp default to 1.0
+    def autoModeValue = (settings.autoMode != null && settings.autoMode != "") ? settings.autoMode : "YES-Auto" //if user doesn't select autoMode default to "YES-Auto"
     def LowDiff = fanDiffTempValue*1
     def MedDiff = fanDiffTempValue*2
     def HighDiff = fanDiffTempValue*3
     log.debug "EVALUATE($currentTemp, $desiredTemp, $fanDimmer.currentSwitch, $fanDimmer.currentLevel, $fanDiffTemp, $fanDiffTempValue, $settings.fanDiffTemp)"
-	if (autoMode == "YES-Auto") {
+	if (autoModeValue == "YES-Auto") {
     	switch (currentTemp - desiredTemp) {
         	case { it  >= HighDiff }:
         		// turn on fan high speed
