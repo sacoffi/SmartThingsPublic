@@ -23,7 +23,7 @@
  *
  *
  *  Author: Dale Coffing
- *  Version: 0.9.20160514
+ *  Version: 1.0.20160514
  *
  *   * Change Log
  * 2016-5-14 Fan temperature differential variable added, change sensor to tempSensor
@@ -77,7 +77,7 @@ preferences {
 	section("Select ceiling fan operating mode desired..."){
 		input "autoMode", "enum", title: "Enable Ceiling Fan Thermostat?", options: ["NO-Manual","YES-Auto"], required: true
 	}
-    section ("3 Speed Ceiling Fan Thermostat - Ver 0.9.20160514") { }
+    section ("3 Speed Ceiling Fan Thermostat - Ver 1.0.20160514") { }
 }
 def installed(){
 	subscribe(tempSensor, "temperature", temperatureHandler)
