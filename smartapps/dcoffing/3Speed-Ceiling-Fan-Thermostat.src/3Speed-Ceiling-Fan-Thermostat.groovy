@@ -23,10 +23,10 @@
  *
  *
  *  Author: Dale Coffing
- *  Version: 0.9h
+ *  Version: 0.9.20160514
  *
  *   * Change Log
- * 2016-5-14 (h)Fan temperature differential variable added, change sensor to tempSensor
+ * 2016-5-14 Fan temperature differential variable added, change sensor to tempSensor
  * 2016-5-13 (g)replace ELSE IF for SWITCH statements on fan speeds, removed emergency temp control
  * 2016-5-12 added new icons for 3SFC, colored text in 3SFC125x125.png and 3sfc250x250.png
  * 2016-5-6  (e)minor changes to text, labels, for clarity, (^^^e)default to NO-Manual for thermostat mode 
@@ -74,10 +74,10 @@ preferences {
 	section("Within this number of minutes..."){
 		input "minutes", "number", title: "Minutes", required: false
 	}
-	section("Select operating mode desired (defaulted 'Manual')..."){
+	section("Select ceiling fan operating mode desired..."){
 		input "autoMode", "enum", title: "Enable Ceiling Fan Thermostat?", options: ["NO-Manual","YES-Auto"], required: true
 	}
-    section ("3 Speed Ceiling Fan Thermostat - Ver 0.9h") { }
+    section ("3 Speed Ceiling Fan Thermostat - Ver 0.9.20160514") { }
 }
 def installed(){
 	subscribe(tempSensor, "temperature", temperatureHandler)
