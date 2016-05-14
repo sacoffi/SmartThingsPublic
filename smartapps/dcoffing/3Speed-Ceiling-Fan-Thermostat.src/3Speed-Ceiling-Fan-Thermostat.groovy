@@ -1,5 +1,5 @@
 /**
- * Virtual Thermostat for 3 Speed Ceiling Fan  
+ * Virtual Thermostat for 3 Speed Ceiling Fan Control 
  *  This smartapp provides automatic control of Low, Medium, High speeds of a ceiling fan using 
  *  any temperature sensor with optional motion override. 
  *  It requires two hardware devices, any temperature sensor and 3-speed smart fan controller
@@ -49,8 +49,8 @@ definition(
     author: "Dale Coffing",
     description: "Automatic control for 3 Speed Ceiling Fan using Low, Medium, High speeds with any temperature sensor.",
     category: "My Apps",
-	iconUrl: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-Speed-Fan-Control.src/3sfc125x125.png", 
-   	iconX2Url: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-Speed-Fan-Control.src/3sfc250x250.png",
+	iconUrl: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3Speed-Ceiling-Fan-Thermostat.src/3scft125x125.png", 
+   	iconX2Url: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3Speed-Ceiling-Fan-Thermostat.src/3scft250x250.png",
 )
 
 preferences {
