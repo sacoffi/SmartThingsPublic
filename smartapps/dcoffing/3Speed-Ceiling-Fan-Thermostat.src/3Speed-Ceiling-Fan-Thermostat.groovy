@@ -26,8 +26,8 @@
  *  Version: 0.9h
  *
  *   * Change Log
- * 2016-5-14 (h)Fan temperature differential variable
- * 2016-5-13 (g)replace ELSE IF for SWITCH statements on fan speeds
+ * 2016-5-14 (h)Fan temperature differential variable, change sensor to tempSensor
+ * 2016-5-13 (g)replace ELSE IF for SWITCH statements on fan speeds, removed emergency temp control
  * 2016-5-12 added new icons for 3SFC, colored text in 3SFC125x125.png and 3sfc250x250.png
  * 2016-5-6  (e)minor changes to text, labels, for clarity, (^^^e)default to NO-Manual for thermostat mode 
  * 2016-5-5c clean code, added current ver section header, allow for multiple fan controllers,
@@ -49,13 +49,13 @@ definition(
     author: "Dale Coffing",
     description: "Automatic control of a 3 Speed Ceiling Fan using Low, Medium, High speeds with any temperature sensor.",
     category: "My Apps",
-	iconUrl: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-Speed-Fan-Control.src/3scft125x125.png", 
-   	iconX2Url: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-Speed-Fan-Control.src/3scft250x250.png",
+	iconUrl: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-Speed-Fan-Control.src/3sfc125x125.png", 
+   	iconX2Url: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-Speed-Fan-Control.src/3sfc250x250.png",
 )
 
 preferences {
 	section("Select a temperature sensor to control the fan..."){
-		input "sensor", "capability.temperatureMeasurement",
+		input "tempSensor", "capability.temperatureMeasurement",
         	multiple:false, title: "Temperature Sensor", required: true 
 	}
     section("Select the fan control hardware..."){
@@ -80,7 +80,7 @@ preferences {
     section ("3 Speed Ceiling Fan Thermostat - Ver 0.9h") { }
 }
 def installed(){
-	subscribe(sensor, "temperature", temperatureHandler)
+	subscribe(tempSensor, "temperature", temperatureHandler)
 	if (motion) {
 		subscribe(motion, "motion", motionHandler)
 	}
@@ -88,11 +88,11 @@ def installed(){
 
 def updated(){
 	unsubscribe()
-	subscribe(sensor, "temperature", temperatureHandler)
+	subscribe(tempSensor, "temperature", temperatureHandler)
 	if (motion) {
 		subscribe(motion, "motion", motionHandler)
 	}					// @krlaframboise fix for setpoint changes to immediately act.
-    handleTemperature(sensor.currentTemperature) //The change I recommended bypasses the temperatureHandler method 											
+    handleTemperature(tempSensor.currentTemperature) //The change I recommended bypasses the temperatureHandler method 											
 } 						 //and calls the evaluate method with the current temperature and
 						//setpoint setting. If you want to execute the same code that the                                                
 def temperatureHandler(evt){			//temperatureHandler method calls, you should break that code into					
@@ -112,7 +112,7 @@ def handleTemperature(temp) {			// method named handleTemperature
 
 def motionHandler(evt){
 	if (evt.value == "active") {
-		def lastTemp = sensor.currentTemperature
+		def lastTemp = tempSensor.currentTemperature
 		if (lastTemp != null) {
 			evaluate(lastTemp, setpoint)
 		}
@@ -120,7 +120,7 @@ def motionHandler(evt){
 		def isActive = hasBeenRecentMotion() //define isActive local variable to returned true or false
 		log.debug "INACTIVE($isActive)"
 		if (isActive) {
-			def lastTemp = sensor.currentTemperature
+			def lastTemp = tempSensor.currentTemperature
 			if (lastTemp != null) {  // lastTemp not equal to null (value never been set) 
 				evaluate(lastTemp, setpoint)
 			}
