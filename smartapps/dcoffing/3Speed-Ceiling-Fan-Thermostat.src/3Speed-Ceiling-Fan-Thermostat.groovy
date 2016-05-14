@@ -136,11 +136,12 @@ private evaluate(currentTemp, desiredTemp)
 {
 log.debug "EVALUATE($currentTemp, $desiredTemp, $fanDimmer.currentSwitch, $fanDimmer.currentLevel, $autoMode, $fanDiffTemp)"
    // these are temp differentials desired from setpoint for Low, Medium, High fan speeds
-	def fanDiffTempValue = (settings.fanDiffTemp != null && settings.fanDiffTemp != "") ? settings.fanDiffTemp.toInteger() : 1.0
+	def fanDiffTempValue = (settings.fanDiffTemp != null && settings.fanDiffTemp != "") ? settings.fanDiffTemp : 1.0
        
     def LowDiff = fanDiffTempValue*1
     def MedDiff = fanDiffTempValue*2
     def HighDiff = fanDiffTempValue*3
+    log.debug "EVALUATE($currentTemp, $desiredTemp, $fanDimmer.currentSwitch, $fanDimmer.currentLevel, $fanDiffTemp, $fanDiffTempValue, $settings.fanDiffTemp)"
 	if (autoMode == "YES-Auto") {
     	switch (currentTemp - desiredTemp) {
         	case { it  >= HighDiff }:
