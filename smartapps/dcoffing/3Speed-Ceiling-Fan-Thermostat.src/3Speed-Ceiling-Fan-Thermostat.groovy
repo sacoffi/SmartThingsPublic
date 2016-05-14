@@ -26,7 +26,7 @@
  *  Version: 0.9h
  *
  *   * Change Log
- * 2016-5-14 (h)Fan temperature differential variable, change sensor to tempSensor
+ * 2016-5-14 (h)Fan temperature differential variable added, change sensor to tempSensor
  * 2016-5-13 (g)replace ELSE IF for SWITCH statements on fan speeds, removed emergency temp control
  * 2016-5-12 added new icons for 3SFC, colored text in 3SFC125x125.png and 3sfc250x250.png
  * 2016-5-6  (e)minor changes to text, labels, for clarity, (^^^e)default to NO-Manual for thermostat mode 
@@ -47,7 +47,7 @@ definition(
     name: "3 Speed Ceiling Fan Thermostat",
     namespace: "dcoffing",
     author: "Dale Coffing",
-    description: "Automatic control of a 3 Speed Ceiling Fan using Low, Medium, High speeds with any temperature sensor.",
+    description: "Automatic control for 3 Speed Ceiling Fan using Low, Medium, High speeds with any temperature sensor.",
     category: "My Apps",
 	iconUrl: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-Speed-Fan-Control.src/3sfc125x125.png", 
    	iconX2Url: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-Speed-Fan-Control.src/3sfc250x250.png",
@@ -65,8 +65,8 @@ preferences {
 	section("Enter the desired room temperature (ie 72.5)..."){
 		input "setpoint", "decimal", title: "Room Setpoint Temp", required: true
 	}
-    section("Enter the desired differential temp between fan speeds (default=1)..."){
-		input "fanDiffTemp", "decimal", title: "Fan Differential Temp", required: false
+    section("Enter the desired differential temp between fan speeds (default=1.0)..."){
+		input "fanDiffTemp", "decimal", title: "Fan Differential Temp", range: "1..9", required: false
 	}
 	section("When there's been movement from (optional, leave blank to not require motion)..."){
 		input "motion", "capability.motionSensor", title: "Select Motion device", required: false
@@ -134,33 +134,35 @@ def motionHandler(evt){
 
 private evaluate(currentTemp, desiredTemp)
 {
-log.debug "EVALUATE($currentTemp, $desiredTemp, $fanDimmer.currentSwitch, $fanDimmer.currentLevel, $autoMode)"
+log.debug "EVALUATE($currentTemp, $desiredTemp, $fanDimmer.currentSwitch, $fanDimmer.currentLevel, $autoMode, $fanDiffTemp)"
    // these are temp differentials desired from setpoint for Low, Medium, High fan speeds
-    def LowDiff = 1.0 
-    def MedDiff = 2.0
-    def HighDiff = 3.0
+	def fanDiffTempValue = (settings.fanDiffTemp != null && settings.fanDiffTemp != "") ? settings.fanDiffTemp.toInteger() : 1.0
+       
+    def LowDiff = fanDiffTempValue*1
+    def MedDiff = fanDiffTempValue*2
+    def HighDiff = fanDiffTempValue*3
 	if (autoMode == "YES-Auto") {
     	switch (currentTemp - desiredTemp) {
         	case { it  >= HighDiff }:
         		// turn on fan high speed
        			fanDimmer.setLevel(90) 
-            	log.debug "HIGH speed($currentTemp, $desiredTemp, $fanDimmer.currentLevel)"
+            	log.debug "HIGH speed($currentTemp, $desiredTemp, $fanDimmer.currentLevel, $HighDiff)"
                 break  //exit switch statement 
 			case { it >= MedDiff }:
             	// turn on fan medium speed
             	fanDimmer.setLevel(60)
-            	log.debug "MED speed($currentTemp, $desiredTemp, $fanDimmer.currentLevel)"
+            	log.debug "MED speed($currentTemp, $desiredTemp, $fanDimmer.currentLevel, $MedDiff)"
                 break
        		case { it >= LowDiff }:
             	// turn on fan low speed
             	if (fanDimmer.currentSwitch == "off") { // if fan is OFF protect motor by  
             		fanDimmer.setLevel(90)                	// starting fan in High speed temporarily then 
                 	fanDimmer.setLevel(30, [delay: 3000]) 	// change to Low speed after 3 seconds
-                	log.debug "LOW speed after HI3secs($currentTemp, $desiredTemp, $fanDimmer.currentLevel)"
+                	log.debug "LOW speed after HI3secs($currentTemp, $desiredTemp, $fanDimmer.currentLevel, $LowDiff)"
           		} else {
                 	fanDimmer.setLevel(30) 	//fan is already running, not necessary to protect motor
             	}			           //set Low speed immediately
-            	log.debug "LOW speed immediately($currentTemp, $desiredTemp, $fanDimmer.currentLevel)"
+            	log.debug "LOW speed immediately($currentTemp, $desiredTemp, $fanDimmer.currentLevel, $LowDiff)"
                 break
 			default:
             	// check to see if fan should be turned off
