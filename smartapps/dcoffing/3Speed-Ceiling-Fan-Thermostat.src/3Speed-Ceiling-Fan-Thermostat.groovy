@@ -27,7 +27,7 @@
  *
  *   * Change Log
  * 2016-5-15 fixed fan differenial decimal point error; removed range: "1..99", removed all fanDimmer.setLevel(0)
- * 	     added high resolution iconX3Url
+ *			 added iconX3Url, replace motion with motionSensor for clarity, reworded preferences
  * 2016-5-14 Fan temperature differential variable added, change sensor to tempSensor,
  * 2016-5-13 (g)replace ELSE IF for SWITCH statements on fan speeds, removed emergency temp control
  * 2016-5-12 added new icons for 3SFC, colored text in 3SFC125x125.png and 3sfc250x250.png
@@ -58,7 +58,7 @@ preferences {
 		input "tempSensor", "capability.temperatureMeasurement",
         	multiple:false, title: "Temperature Sensor", required: true 
 	}
-    section("Select the fan control hardware..."){
+    section("Select the ceiling fan control hardware..."){
 		input "fanDimmer", "capability.switchLevel", 
 	    	multiple:false, title: "Fan Control device", required: true
 	}
@@ -68,11 +68,11 @@ preferences {
     section("Enter the desired differential temp between fan speeds (default=1.0)..."){
 		input "fanDiffTemp", "decimal", title: "Fan Differential Temp", required: false
 	}
-	section("When there's been movement from (optional, leave blank to not require motion)..."){
-		input "motion", "capability.motionSensor", title: "Select Motion device", required: false
+	section("Turn off ceiling fan when there's been no movement from (optional, leave blank to not require motion)..."){
+		input "motionSensor", "capability.motionSensor", title: "Select Motion device", required: false
 	}
-	section("Within this number of minutes..."){
-		input "minutes", "number", title: "Minutes", required: false
+	section("...within this number of minutes"){
+		input "minutes", "number", title: "Minutes?", required: false
 	}
 	section("Select ceiling fan operating mode desired (default to 'YES-Auto'..."){
 		input "autoMode", "enum", title: "Enable Ceiling Fan Thermostat?", options: ["NO-Manual","YES-Auto"], required: false
@@ -81,16 +81,16 @@ preferences {
 }
 def installed(){
 	subscribe(tempSensor, "temperature", temperatureHandler)
-	if (motion) {
-		subscribe(motion, "motion", motionHandler)
+	if (motionSensor) {
+		subscribe(motionSensor, "motion", motionHandler)
 	}
 }
 
 def updated(){
 	unsubscribe()
 	subscribe(tempSensor, "temperature", temperatureHandler)
-	if (motion) {
-		subscribe(motion, "motion", motionHandler)
+	if (motionSensor) {
+		subscribe(motionSensor, "motion", motionHandler)
 	}													//@krlaframboise fix for setpoint changes to immediately work on fan.
     handleTemperature(tempSensor.currentTemperature)	//The change bypasses the temperatureHandler method 											
 } 														//and calls the evaluate method with the current temperature and
@@ -177,7 +177,7 @@ log.debug "EVALUATE($currentTemp, $desiredTemp, $fanDimmer.currentSwitch, $fanDi
 private hasBeenRecentMotion()
 {
 	def isActive = false
-	if (motion && minutes) {
+	if (motionSensor && minutes) {
 		def deltaMinutes = minutes as Long
 		if (deltaMinutes) {
 			def motionEvents = motion.eventsSince(new Date(now() - (60000 * deltaMinutes)))
