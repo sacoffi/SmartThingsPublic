@@ -23,13 +23,14 @@
  *
  *
  *  Author: Dale Coffing
- *  Version: 1.0.20160515
+ *  Version: 1.0.20160515c
  *
  *   * Change Log
  * 2016-5-15 fixed fan differenial decimal point error; removed range: "1..99", removed all fanDimmer.setLevel(0)
- *			 added iconX3Url, replace motion with motionSensor for clarity, reworded preferences
- * 2016-5-14 Fan temperature differential variable added, change sensor to tempSensor,
- * 2016-5-13 (g)replace ELSE IF for SWITCH statements on fan speeds, removed emergency temp control
+ *			 added iconX3Url, reworded preferences
+ *			 best practices to utilize initialize() method & replace motion with motionSensor
+ * 2016-5-14 Fan temperature differential variable added, best practices to change sensor to tempSensor,
+ * 2016-5-13 best practices to replace ELSE IF for SWITCH statements on fan speeds, removed emergency temp control
  * 2016-5-12 added new icons for 3SFC, colored text in 3SFC125x125.png and 3sfc250x250.png
  * 2016-5-6  (e)minor changes to text, labels, for clarity, (^^^e)default to NO-Manual for thermostat mode 
  * 2016-5-5c clean code, added current ver section header, allow for multiple fan controllers,
@@ -77,27 +78,33 @@ preferences {
 	section("Select ceiling fan operating mode desired (default to 'YES-Auto'..."){
 		input "autoMode", "enum", title: "Enable Ceiling Fan Thermostat?", options: ["NO-Manual","YES-Auto"], required: false
 	}
-    section ("3 Speed Ceiling Fan Thermostat - Version 1.0.20160515") { }
+    section ("3 Speed Ceiling Fan Thermostat - Version 1.0.20160515c") { }
 }
-def installed(){
-	subscribe(tempSensor, "temperature", temperatureHandler)
-	if (motionSensor) {
-		subscribe(motionSensor, "motion", motionHandler)
-	}
+def installed() {
+	log.debug "def INSTALLED with settings: ${settings}"
+	initialize()
 }
 
-def updated(){
+def updated() {
+	log.debug "def UPDATED with settings: ${settings}"
 	unsubscribe()
-	subscribe(tempSensor, "temperature", temperatureHandler)
-	if (motionSensor) {
-		subscribe(motionSensor, "motion", motionHandler)
-	}													//@krlaframboise fix for setpoint changes to immediately work on fan.
+	initialize()
+														//@krlaframboise fix for setpoint changes to immediately work on fan.
     handleTemperature(tempSensor.currentTemperature)	//The change bypasses the temperatureHandler method 											
 } 														//and calls the evaluate method with the current temperature and
-														//setpoint setting.                                             
-def temperatureHandler(evt){				
+														//setpoint setting.
+                                                        
+def initialize() {
+	log.debug "def INITIALIZE with settings: ${settings}"
+	subscribe(tempSensor, "temperature", temperatureHandler)
+	if (motionSensor) {
+		subscribe(motionSensor, "motion", motionHandler) //Call the motionHandler method when there is any reported change to the "motion" attribute
+	}   
+}
+                                                        
+def temperatureHandler(evt) {				
     handleTemperature(evt.doubleValue)
-}	//
+}
 
 def handleTemperature(temp) {
 	def isActive = hasBeenRecentMotion()
@@ -109,7 +116,7 @@ def handleTemperature(temp) {
  	}
 }
 
-def motionHandler(evt){
+def motionHandler(evt) {
 	if (evt.value == "active") {
 		def lastTemp = tempSensor.currentTemperature
 		if (lastTemp != null) {
