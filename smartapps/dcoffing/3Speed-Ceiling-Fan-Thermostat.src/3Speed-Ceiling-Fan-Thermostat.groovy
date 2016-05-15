@@ -23,11 +23,11 @@
  *
  *
  *  Author: Dale Coffing
- *  Version: 1.0.20160514
+ *  Version: 1.0.20160515
  *
  *   * Change Log
+ * 2016-5-15 fixed fan differenial decimal point error; removed range(1..99), removed all fanDimmer.setLevel(0)
  * 2016-5-14 Fan temperature differential variable added, change sensor to tempSensor,
- *			 fix decimals
  * 2016-5-13 (g)replace ELSE IF for SWITCH statements on fan speeds, removed emergency temp control
  * 2016-5-12 added new icons for 3SFC, colored text in 3SFC125x125.png and 3sfc250x250.png
  * 2016-5-6  (e)minor changes to text, labels, for clarity, (^^^e)default to NO-Manual for thermostat mode 
@@ -75,7 +75,7 @@ preferences {
 	section("Select ceiling fan operating mode desired (default to 'YES-Auto'..."){
 		input "autoMode", "enum", title: "Enable Ceiling Fan Thermostat?", options: ["NO-Manual","YES-Auto"], required: false
 	}
-    section ("3 Speed Ceiling Fan Thermostat - Version 1.0.20160514") { }
+    section ("3 Speed Ceiling Fan Thermostat - Version 1.0.20160515") { }
 }
 def installed(){
 	subscribe(tempSensor, "temperature", temperatureHandler)
@@ -104,8 +104,7 @@ def handleTemperature(temp) {
 	}
 	else {
      	fanDimmer.off()
-        fanDimmer.setLevel(0)
-	}
+ 	}
 }
 
 def motionHandler(evt){
@@ -125,7 +124,6 @@ def motionHandler(evt){
 		}
 		else {
      	    fanDimmer.off()
-            fanDimmer.setLevel(0)
 		}
 	}
 }
