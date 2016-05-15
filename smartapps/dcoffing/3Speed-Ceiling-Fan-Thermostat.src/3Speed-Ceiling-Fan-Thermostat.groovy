@@ -64,7 +64,7 @@ preferences {
 		input "setpoint", "decimal", title: "Room Setpoint Temp", required: true
 	}
     section("Enter the desired differential temp between fan speeds (default=1.0)..."){
-		input "fanDiffTemp", "decimal", title: "Fan Differential Temp", range: "1..99", required: false
+		input "fanDiffTemp", "decimal", title: "Fan Differential Temp", required: false
 	}
 	section("When there's been movement from (optional, leave blank to not require motion)..."){
 		input "motion", "capability.motionSensor", title: "Select Motion device", required: false
