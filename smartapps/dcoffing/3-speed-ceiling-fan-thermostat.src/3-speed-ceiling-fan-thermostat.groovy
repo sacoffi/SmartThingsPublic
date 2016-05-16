@@ -1,4 +1,4 @@
-/**
+/**ide
  * Virtual Thermostat for 3 Speed Ceiling Fan Control 
  *  This smartapp provides automatic control of Low, Medium, High speeds of a ceiling fan using 
  *  any temperature sensor with optional motion override. 
