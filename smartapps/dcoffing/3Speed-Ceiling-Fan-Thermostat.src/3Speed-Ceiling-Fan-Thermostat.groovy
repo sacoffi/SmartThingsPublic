@@ -27,8 +27,8 @@
  *
  *   * Change Log
  * 2016-5-15 fixed fan differenial decimal point error by removing range: "1..99", removed all fanDimmer.setLevel(0)
- *			 added iconX3Url, reworded preferences, rename evaluate to tempCheck for clarity
- *			 best practices to utilize initialize() method & replace motion with motionSensor,
+ *	     added iconX3Url, reworded preferences, rename evaluate to tempCheck for clarity,
+ *	     best practices to utilize initialize() method & replace motion with motionSensor,
  * 2016-5-14 Fan temperature differential variable added, best practices to change sensor to tempSensor,
  * 2016-5-13 best practices to replace ELSE IF for SWITCH statements on fan speeds, removed emergency temp control
  * 2016-5-12 added new icons for 3SFC, colored text in 3SFC125x125.png and 3sfc250x250.png
@@ -41,7 +41,6 @@
  * 2016-5-4b cleaned debug logs, removed heat-cool selection, removed multiple stages
  * 2016-5-3  fixed error on not shutting down, huge shout out to my bro Stephen Coffing in the logic formation 
  * 
- *
  */
 definition(
     name: "3 Speed Ceiling Fan Thermostat",
@@ -89,10 +88,8 @@ def updated() {
 	log.debug "def UPDATED with settings: ${settings}"
 	unsubscribe()
 	initialize()
-
-    handleTemperature(tempSensor.currentTemperature) //call handleTemperature to bypass temperatureHandler method 
+    	handleTemperature(tempSensor.currentTemperature) //call handleTemperature to bypass temperatureHandler method 
 } 
-
 
 def initialize() {
 	log.debug "def INITIALIZE with settings: ${settings}"
@@ -103,9 +100,9 @@ def initialize() {
 }
                                    //Event Handler Methods                     
 def temperatureHandler(evt) {
-	log.debug "temperatureHandler called: $evt"	
-    handleTemperature(evt.doubleValue)
-	log.debug "temperatureHandler evt.doubleValue : $evt"
+	// log.debug "temperatureHandler called: $evt"	
+    	handleTemperature(evt.doubleValue)
+	// log.debug "temperatureHandler evt.doubleValue : $evt"
 }
 
 def handleTemperature(temp) {		//
@@ -117,7 +114,7 @@ def handleTemperature(temp) {		//
 		log.debug "handleTemperature ISACTIVE($isActive)"
 	}
 	else {
-     	fanDimmer.off()
+     		fanDimmer.off()
  	}
 }
 
@@ -140,7 +137,7 @@ def motionHandler(evt) {
 			}
 		}
 		else {
-     	    fanDimmer.off()
+     	    		fanDimmer.off()
 		}
 	}
 }
@@ -148,45 +145,44 @@ def motionHandler(evt) {
 private tempCheck(currentTemp, desiredTemp)
 {
 log.debug "TEMPCHECK($currentTemp, $desiredTemp, $fanDimmer.currentSwitch, $fanDimmer.currentLevel, $autoMode, $fanDiffTemp)"
-   
-	def fanDiffTempValue = (settings.fanDiffTemp != null && settings.fanDiffTemp != "") ? settings.fanDiffTemp : 1.0	//if user doesn't enter Fan Diff Temp then default to 1.0
+    def fanDiffTempValue = (settings.fanDiffTemp != null && settings.fanDiffTemp != "") ? settings.fanDiffTemp : 1.0	//if user doesn't enter Fan Diff Temp then default to 1.0
     def autoModeValue = (settings.autoMode != null && settings.autoMode != "") ? settings.autoMode : "YES-Auto"			//if user doesn't select autoMode then default to "YES-Auto"
     def LowDiff = fanDiffTempValue*1
     def MedDiff = fanDiffTempValue*2
     def HighDiff = fanDiffTempValue*3
 	
-    log.debug "TEMPCHECK($currentTemp, $desiredTemp, $fanDimmer.currentSwitch, $fanDimmer.currentLevel, $autoMode, $fanDiffTemp, $fanDiffTempValue, $settings.fanDiffTemp)"
-	if (autoModeValue == "YES-Auto") {
+log.debug "TEMPCHECK($currentTemp, $desiredTemp, $fanDimmer.currentSwitch, $fanDimmer.currentLevel, $autoMode, $fanDiffTemp, $fanDiffTempValue, $settings.fanDiffTemp)"
+    if (autoModeValue == "YES-Auto") {
     	switch (currentTemp - desiredTemp) {
         	case { it  >= HighDiff }:
         		// turn on fan high speed
        			fanDimmer.setLevel(90) 
-            	log.debug "HI speed($currentTemp, $desiredTemp, $fanDimmer.currentLevel, $HighDiff)"
-                break  //exit switch statement 
-			case { it >= MedDiff }:
-            	// turn on fan medium speed
-            	fanDimmer.setLevel(60)
-            	log.debug "MED speed($currentTemp, $desiredTemp, $fanDimmer.currentLevel, $MedDiff)"
-                break
+            		log.debug "HI speed($currentTemp, $desiredTemp, $fanDimmer.currentLevel, $HighDiff)"
+	                break  //exit switch statement 
+		case { it >= MedDiff }:
+            		// turn on fan medium speed
+            		fanDimmer.setLevel(60)
+            		log.debug "MED speed($currentTemp, $desiredTemp, $fanDimmer.currentLevel, $MedDiff)"
+                	break
        		case { it >= LowDiff }:
-            	// turn on fan low speed
-            	if (fanDimmer.currentSwitch == "off") {		// if fan is OFF to make it easier on motor by   
-            		fanDimmer.setLevel(90)					// starting fan in High speed temporarily then 
-                	fanDimmer.setLevel(30, [delay: 3000])	// change to Low speed after 3 seconds
-                	log.debug "LO speed after HI 3secs($currentTemp, $desiredTemp, $fanDimmer.currentLevel, $LowDiff)"
+            		// turn on fan low speed
+            		if (fanDimmer.currentSwitch == "off") {		// if fan is OFF to make it easier on motor by   
+            			fanDimmer.setLevel(90)					// starting fan in High speed temporarily then 
+                		fanDimmer.setLevel(30, [delay: 3000])	// change to Low speed after 3 seconds
+                		log.debug "LO speed after HI 3secs($currentTemp, $desiredTemp, $fanDimmer.currentLevel, $LowDiff)"
           		} else {
-                	fanDimmer.setLevel(30)	//fan is already running, not necessary to protect motor
-            	}							//set Low speed immediately
-            	log.debug "LO speed immediately($currentTemp, $desiredTemp, $fanDimmer.currentLevel, $LowDiff)"
-                break
-			default:
-            	// check to see if fan should be turned off
-            	if (desiredTemp - currentTemp >= 0 ) {	//below or equal to setpoint, turn off fan, zero level
-            		fanDimmer.off()
-            		log.debug "below SP+Diff=fan OFF ($currentTemp, $desiredTemp, $fanDimmer.currentLevel)"
-				} 
-                log.debug "autoMode YES-MANUAL? else OFF($currentTemp, $desiredTemp, $fanDimmer.currentLevel, $autoMode)"
-        }	//end of switch statement
+                		fanDimmer.setLevel(30)	//fan is already running, not necessary to protect motor
+            		}							//set Low speed immediately
+            		log.debug "LO speed immediately($currentTemp, $desiredTemp, $fanDimmer.currentLevel, $LowDiff)"
+                	break
+		default:
+            		// check to see if fan should be turned off
+            		if (desiredTemp - currentTemp >= 0 ) {	//below or equal to setpoint, turn off fan, zero level
+            			fanDimmer.off()
+            			log.debug "below SP+Diff=fan OFF ($currentTemp, $desiredTemp, $fanDimmer.currentLevel)"
+			} 
+                	log.debug "autoMode YES-MANUAL? else OFF($currentTemp, $desiredTemp, $fanDimmer.currentLevel, $autoMode)"
+        	}	//end of switch statement
 	}	// end of IF (autoModeValue...
 }
 
