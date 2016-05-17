@@ -1,5 +1,5 @@
 /**
- * Virtual Thermostat for 3 Speed Ceiling Fan Control 
+ *  -- Virtual Thermostat for 3 Speed Ceiling Fan Control --
  *  This smartapp provides automatic control of Low, Medium, High speeds of a ceiling fan using 
  *  any temperature sensor with optional motion override. 
  *  It requires two hardware devices, any temperature sensor and 3-speed smart fan controller
@@ -23,10 +23,11 @@
  *
  *
  *  Author: Dale Coffing
- *  Version: 1.0.20160516
+ *  Version: 1.0.20160516a
  *
  *   * Change Log
  * 2016-5-16 fixed typo with motion to motionSensor in hasBeenRecentMotion()
+ *           fixed IDE integration with ST by making another change to file name specifics.
  * 2016-5-15 fixed fan differenial decimal point error by removing range: "1..99", removed all fanDimmer.setLevel(0)
  *	         added iconX3Url, reworded preferences, rename evaluate to tempCheck for clarity,
  *	         best practices to utilize initialize() method & replace motion with motionSensor,
@@ -78,7 +79,7 @@ preferences {
 	section("Select ceiling fan operating mode desired (default to 'YES-Auto'..."){
 		input "autoMode", "enum", title: "Enable Ceiling Fan Thermostat?", options: ["NO-Manual","YES-Auto"], required: false
 	}
-	section ("3 Speed Ceiling Fan Thermostat - Version 1.0.20160516") { }
+	section ("3 Speed Ceiling Fan Thermostat - Version 1.0.20160516a") { }
 }
 def installed() {
 	log.debug "def INSTALLED with settings: ${settings}"
