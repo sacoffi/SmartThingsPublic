@@ -1,54 +1,44 @@
-/**
- *  *- Virtual Thermostat for 3 Speed Ceiling Fan Control --
- *  This smartapp provides automatic control of Low, Medium, High speeds of a ceiling fan using 
- *  any temperature sensor with optional motion override. 
- *  It requires two hardware devices, any temperature sensor and 3-speed smart fan controller
- *  such as the GE 12730 Z-Wave Smart Fan Control hardware.
- *  It works well with @ChadCK custom device handler Z-Wave Smart Fan Control located here
- *  https://community.smartthings.com/t/z-wave-smart-fan-control-custom-device-type/25558
- *  This smartapp was modified from the SmartThings Virtual Thermostat code which only allowed
- *  for simple on/off control and not multiple fan stages. 
- *  Thanks to @krlaframboise for his patient help and knowledge in solving issues for a first time coder.
- *
- *  Copyright 2016 Dale Coffing
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- *  in compliance with the License. You may obtain a copy of the License at:
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
- *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
- *  for the specific language governing permissions and limitations under the License.
- *
- *
- *  Author: Dale Coffing
- *  Version: 1.0.20160518
- *
- *   * Change Log
- * 2016-5-18 code clean up only
- * 2016-5-17 fanDiffTemp input changed to use enum with preselected values to overcome range:"0.1..5.0" bug
- * 2016-5-16 fixed typo with motion to motionSensor in hasBeenRecentMotion()
- *           fixed IDE integration with ST by making another change to file name specifics.
- * 2016-5-15 fixed fan differenial decimal point error by removing range: "1..99", removed all fanDimmer.setLevel(0)
- *	         added iconX3Url, reworded preferences, rename evaluate to tempCheck for clarity,
- *	         best practices to utilize initialize() method & replace motion with motionSensor,
- * 2016-5-14 Fan temperature differential variable added, best practices to change sensor to tempSensor,
- * 2016-5-13 best practices to replace ELSE IF for SWITCH statements on fan speeds, removed emergency temp control
- * 2016-5-12 added new icons for 3SFC, colored text in 3SFC125x125.png and 3sfc250x250.png
- * 2016-5-6  (e)minor changes to text, labels, for clarity, (^^^e)default to NO-Manual for thermostat mode 
- * 2016-5-5c clean code, added current ver section header, allow for multiple fan controllers,
- *           replace icons to ceiling fan, modify name from Control to Thermostat
- * 2016-5-5b @krlaframboise change to bypasses the temperatureHandler method and calls the tempCheck method
- *           with the current temperature and setpoint setting
- * 2016-5-5  autoMode added for manual override of auto control
- * 2016-5-4b cleaned debug logs, removed heat-cool selection, removed multiple stages
- * 2016-5-3  fixed error on not shutting down, huge shout out to my bro Stephen Coffing in the logic formation 
- * 
- * Known Behavior Quirks from original Virtual Thermostat code
- * -when SP is updated, temp control isn't evaluated immediately, an event must trigger like change in temp, motion
- * -if load is previously running when smartapp is loaded, it isn't evaluated immediately to turn off when SP>CT
- *
+/*
+   Virtual Thermostat for 3 Speed Ceiling Fan Control
+   Copyright 2016 Dale Coffing
+   
+   This smartapp provides automatic control of Low, Medium, High speeds of a ceiling fan using 
+   any temperature sensor with optional motion override. 
+   It requires two hardware devices; any temperature sensor and a dimmer type smart fan controller
+   such as the GE 12730 or Leviton VRF01-1LX
+   
+  Change Log
+  2016-5-19 code clean up only
+  2016-5-17 fanDiffTemp input changed to use enum with preselected values to overcome range:"0.1..5.0" bug
+  2016-5-16 fixed typo with motion to motionSensor in hasBeenRecentMotion()
+            fixed IDE integration with ST by making another change to file name specifics.
+  2016-5-15 fixed fan differenial decimal point error by removing range: "1..99", removed all fanDimmer.setLevel(0)
+ 	         added iconX3Url, reworded preferences, rename evaluate to tempCheck for clarity,
+ 	         best practices to utilize initialize() method & replace motion with motionSensor,
+  2016-5-14 Fan temperature differential variable added, best practices to change sensor to tempSensor,
+  2016-5-13 best practices to replace ELSE IF for SWITCH statements on fan speeds, removed emergency temp control
+  2016-5-12 added new icons for 3SFC, colored text in 3SFC125x125.png and 3sfc250x250.png
+  2016-5-6  (e)minor changes to text, labels, for clarity, (^^^e)default to NO-Manual for thermostat mode 
+  2016-5-5c clean code, added current ver section header, allow for multiple fan controllers,
+            replace icons to ceiling fan, modify name from Control to Thermostat
+  2016-5-5b @krlaframboise change to bypasses the temperatureHandler method and calls the tempCheck method
+            with the current temperature and setpoint setting
+  2016-5-5  autoMode added for manual override of auto control
+  2016-5-4b cleaned debug logs, removed heat-cool selection, removed multiple stages
+  2016-5-3  fixed error on not shutting down, huge shout out to my bro Stephen Coffing in the logic formation 
+  
+  Known Behavior Quirks from original Virtual Thermostat code
+  -when SP is updated, temp control isn't evaluated immediately, an event must trigger like change in temp, motion
+  -if load is previously running when smartapp is loaded, it isn't evaluated immediately to turn off when SP>CT
+ 
+  Thanks to @krlaframboise, @MikeMaxwell for help and knowledge in solving issues for a first time coder.
+ 
+   Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+   in compliance with the License. You may obtain a copy of the License at: www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+   on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
+   for the specific language governing permissions and limitations under the License.
+  
  */
 definition(
     name: "3 Speed Ceiling Fan Thermostat",
@@ -85,8 +75,9 @@ preferences {
 	section("Select ceiling fan operating mode desired (default to 'YES-Auto'..."){
 		input "autoMode", "enum", title: "Enable Ceiling Fan Thermostat?", options: ["NO-Manual","YES-Auto"], required: false
 	}
-	section ("3 Speed Ceiling Fan Thermostat - Version 1.0.20160518") { }
+	section ("3 Speed Ceiling Fan Thermostat;   Version:1.0.160519") { } //ver format 1.0.YYMMDD
 }
+
 def installed() {
 	log.debug "def INSTALLED with settings: ${settings}"
 	initialize()
