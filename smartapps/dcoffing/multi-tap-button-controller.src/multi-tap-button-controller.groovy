@@ -9,7 +9,7 @@
    multi-tap functions such as by @darwin or @ethn
       
   Change Log
-  2016-5-26 repo addition, icon change to local
+  2016-5-26 repo addition, new icon change
   2016-5-25 initial code modified from SmartThings Button Controller
             added label modifications 
  
@@ -40,9 +40,10 @@ definition(
     namespace: "dcoffing",
     author: "Dale Coffing",
     description: "Control devices with multi-tap functionality of HomeSeer HS-WS100+ or HS-WD100+",
-    category: "Convenience",
+    category: "My Apps",
     iconUrl: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/multi-tap-button-controller.src/MultiTapIcon125x125.png",
-    iconX2Url: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/multi-tap-button-controller.src/MultiTapIcon250x250.png"
+    iconX2Url: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/multi-tap-button-controller.src/MultiTapIcon250x250.png",
+    iconX3Url: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/multi-tap-button-controller.src/MultiTapIcon250x250.png"
 )
 
 preferences {
@@ -79,7 +80,7 @@ def selectButton() {
             
        		label title: "Assign a name", required: false 
 		}        
-        section ("Multi-Tap Button Controller - Version 0.0.2a") {}
+        section ("Multi-Tap Button Controller - Version 0.0.160526b") {}
 	}
 }
 
