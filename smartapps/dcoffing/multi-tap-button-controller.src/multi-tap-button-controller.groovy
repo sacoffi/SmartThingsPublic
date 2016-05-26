@@ -9,6 +9,7 @@
    multi-tap functions such as by @darwin or @ethn
       
   Change Log
+  2016-5-26 repo addition, icon change to local
   2016-5-25 initial code modified from SmartThings Button Controller
             added label modifications 
  
