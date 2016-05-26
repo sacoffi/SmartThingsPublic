@@ -105,7 +105,7 @@ def selectButton() {
         section("Help About") {
             paragraph helpButton1()
         }
-        section ("Button Controller Plus Version:1.0.160526e") {} //version format 1.0.YYMMDD
+        section ("Button Controller Plus Version:1.0.160526f") {} //version format 1.0.YYMMDD
 	}
 
 }
