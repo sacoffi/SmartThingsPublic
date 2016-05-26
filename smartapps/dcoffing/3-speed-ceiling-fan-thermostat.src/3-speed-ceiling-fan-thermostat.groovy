@@ -27,9 +27,9 @@
   2016-5-4b cleaned debug logs, removed heat-cool selection, removed multiple stages
   2016-5-3  fixed error on not shutting down, huge shout out to my bro Stephen Coffing in the logic formation 
   
-  Known Behavior Quirks from original Virtual Thermostat code
-  -when SP is updated, temp control isn't evaluated immediately, an event must trigger like change in temp, motion
-  -if load is previously running when smartapp is loaded, it isn't evaluated immediately to turn off when SP>CT
+  Known Behavior from original Virtual Thermostat code
+  -(fixed) when SP is updated, temp control isn't evaluated immediately, an event must trigger like change in temp, motion
+  - if load is previously running when smartapp is loaded, it isn't evaluated immediately to turn off when SP>CT
  
   Thanks to @krlaframboise, @MikeMaxwell for help and knowledge in solving issues for a first time coder.
  
