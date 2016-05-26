@@ -41,7 +41,7 @@ definition(
     author: "Dale Coffing",
     description: "Control devices with multi-tap functionality of HomeSeer HS-WS100+ or HS-WD100+",
     category: "Convenience",
-    iconUrl: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/multi-tap-button-controller.src/MultiTapIcon250x250.png",
+    iconUrl: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/multi-tap-button-controller.src/MultiTapIcon125x125.png",
     iconX2Url: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/multi-tap-button-controller.src/MultiTapIcon250x250.png"
 )
 
