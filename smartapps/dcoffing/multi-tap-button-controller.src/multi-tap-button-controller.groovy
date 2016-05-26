@@ -1,12 +1,18 @@
 /**
    Multi-Tap Button Controller for HomeSeer 
-   Copyright 2016 Dale Coffing
+   Copyright 2016  Author: SmartThings, modified by Dale Coffing
    
    This smartapp allows the multi-tap functions of the HomeSeer HS-WD100+ and HS-WS100+ 
    so the double-tap, triple-tap, press & hold functionality can trigger up to 6 events. 
 
    It requires hardware by HomeSeer HS-WD100+ or HS-WS100+ and device handlers that expose the
-   multi-tap functions such as by @darwin or @ethn
+   multi-tap functions such as:
+   
+   @darwin 
+   https://github.com/DarwinsDen/SmartThingsPublic/tree/master/devicetypes/darwinsden/wd100-dimmer.src
+  
+  or @erocm1231
+  https://github.com/erocm123/SmartThingsPublic/tree/master/devicetypes/erocm123/homeseer-hs-wd100-dimmer-switch.src
       
   Change Log
   2016-5-26 repo addition, new icon change
@@ -38,7 +44,7 @@ Hold Down	    	6	   pressed
 definition(
     name: "Multi-Tap Button Controller",
     namespace: "dcoffing",
-    author: "Dale Coffing",
+    author: "SmartThings, Dale Coffing",
     description: "Control devices with multi-tap functionality of HomeSeer HS-WS100+ or HS-WD100+",
     category: "My Apps",
     iconUrl: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/multi-tap-button-controller.src/MultiTapIcon125x125.png",
