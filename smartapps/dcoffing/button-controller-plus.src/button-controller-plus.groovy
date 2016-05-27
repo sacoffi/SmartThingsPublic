@@ -29,29 +29,6 @@
    on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
    for the specific language governing permissions and limitations under the License.
  
- TODO 
-  -Want to add a text paragraph of help showing mapping
-  
-      return dynamicPage(pageProperties) {
-        section("About") {
-            paragraph helpButton1
-        }
-        
-private def helpButton1() {
-    def text =
-" HS-WS100+ and HS-WD100+ Button Mappings " +
-"   Action		 Button#	Button Action    " +
-"---------------------------------------  " +
-"Double-Tap Up		1	   pressed        " +
-"Double-Tap Down	2	   pressed			" +
-"Triple-Tap Up		3	   pressed			" +
-"Triple-Tap Down	4	   pressed			" +
-"Hold Up		   	5	   pressed			" +
-"Hold Down	    	6	   pressed			" 
-}
-
-
-
 */
   
 definition(
