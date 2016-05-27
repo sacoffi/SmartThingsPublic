@@ -116,37 +116,37 @@ def configureButton6() {
 def getButtonSections(buttonNumber) {
 	return {
  //       log.debug "buttonNumber($buttonNumber)"
-		switch (buttonNumber) {
+	switch (buttonNumber) {
    	    	case 1:
   	         	section("Hardware specific info:") {  
             		paragraph ("-For WD100+ or WS100+ devices; this FIRST Button action occurs with a double-tap on upper paddle. *Select 'Pushed' (not Held) actions. -For the Aeon Minimote the FIRST button is upper left when operating in hand.")
         		}
-                break
+                	break
         	case 2:
-            	section("Hardware specific info:") {  
-           			paragraph ("-For WD100+ or WS100+ devices; this SECOND Button action occurs with a double-tap on lower paddle. *Select 'Pushed' (not Held) actions. -For the Aeon Minimote the SECOND button is upper right when operating in hand.") 		
+            		section("Hardware specific info:") {  
+           		paragraph ("-For WD100+ or WS100+ devices; this SECOND Button action occurs with a double-tap on lower paddle. *Select 'Pushed' (not Held) actions. -For the Aeon Minimote the SECOND button is upper right when operating in hand.") 		
         		}
-                break
+                	break
         	case 3:
-            	section("Hardware specific info:") {  
-           			paragraph ("-For WD100+ or WS100+ devices; this THIRD Button action occurs with a triple-tap on upper paddle. *Select 'Pushed' (not Held) actions. -For the Aeon Minimote the THIRD button is lower left when operating in hand.") 		
+            		section("Hardware specific info:") {  
+           		paragraph ("-For WD100+ or WS100+ devices; this THIRD Button action occurs with a triple-tap on upper paddle. *Select 'Pushed' (not Held) actions. -For the Aeon Minimote the THIRD button is lower left when operating in hand.") 		
         		}
-                break
+                	break
         	case 4:
-            	section("Hardware specific info:") {  
-           			paragraph ("-For WD100+ or WS100+ devices; this FOURTH Button action occurs with a triple-tap on lower paddle. *Select 'Pushed' (not Held) actions. -For the Aeon Minimote the FOURTH button is lower right when operating in hand.") 		 		
+            		section("Hardware specific info:") {  
+           		paragraph ("-For WD100+ or WS100+ devices; this FOURTH Button action occurs with a triple-tap on lower paddle. *Select 'Pushed' (not Held) actions. -For the Aeon Minimote the FOURTH button is lower right when operating in hand.") 		 		
         		}
-                break
+                	break
         	case 5:
-            	section("Hardware specific info:") {  
-           			paragraph ("-For WD100+ or WS100+ devices; this FIFTH Button action occurs with a press & hold on lower paddle. *Select 'Pushed' (not Held) actions.") 		
+            		section("Hardware specific info:") {  
+           		paragraph ("-For WD100+ or WS100+ devices; this FIFTH Button action occurs with a press & hold on lower paddle. *Select 'Pushed' (not Held) actions.") 		
         		}
-                break
+                	break
         	case 6:
-            	section("Hardware specific info:") {  
-           			paragraph ("-For WD100+ or WS100+ devices; this SIXTH Button action occurs with a press & hold on lower paddle. *Select 'Pushed' (not Held) actions.") 		
+            		section("Hardware specific info:") {  
+           		paragraph ("-For WD100+ or WS100+ devices; this SIXTH Button action occurs with a press & hold on lower paddle. *Select 'Pushed' (not Held) actions.") 		
         		}
-                break
+                	break
         }        	
       
 		section("Lights to Toggle") {
