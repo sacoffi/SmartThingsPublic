@@ -2,16 +2,14 @@
  	Button Controller Plus
   	Copyright 2016  Author: SmartThings, modified by Bruce Ravenel, modified by Dale Coffing 
        
-   This smartapp allows the buttons of a device like the Aeon Minimote, Key Fob, or the
-   multi-tap functions of the HomeSeer HS-WD100+ and HS-WS100+ so the double-tap, triple-tap,
-   press & hold functionality can trigger up to 6 events. 
+   Control devices using the buttons of an Aeon Minimote, Key Fob, or HomeSeer WD100+ and WS100+
+   multi-tap features so the double-tap, triple-tap, press & hold functionality can trigger 
+   up to 6 home automation events. 
    
-   If using hardware by HomeSeer HS-WD100+ or HS-WS100+ you need device handlers that expose the
-   multi-tap functions. Such as:
-   
+   The HomeSeer HS-WD100+ or HS-WS100+ needs device handlers that expose the multi-tap features
+   such as:
   @darwin 
   https://github.com/DarwinsDen/SmartThingsPublic/tree/master/devicetypes/darwinsden/wd100-dimmer.src
-  
   @erocm1231
   https://github.com/erocm123/SmartThingsPublic/tree/master/devicetypes/erocm123/homeseer-hs-wd100-dimmer-switch.src
       
