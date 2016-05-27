@@ -16,11 +16,12 @@
   https://github.com/erocm123/SmartThingsPublic/tree/master/devicetypes/erocm123/homeseer-hs-wd100-dimmer-switch.src
       
   Change Log
-  2016-5-26 repo addition, new icon change. 
-            Added 5th, 6th button options to code for HomeSeer switches 6 total functions,
-            renamed Sonos to Speaker to update terminology
-  2016-5-25 initial code modified from @bravenel
-            Added label modifications 
+  2016-05-27 Added Hardware specific help paragraph per button 
+  2016-05-26 Repo addition, new icon change. 
+             Added 5th, 6th button options to code for HomeSeer switches 6 total functions,
+             Renamed Sonos to Speaker to update terminology
+  2016-05-25 Initial code modified from @bravenel
+             Added label modifications 
   2015-09-14 Added virtual buttons
  
    Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -83,7 +84,7 @@ def selectButton() {
  //       section("More Info on HomeSeer HS-WS100+ HS-WD100+") {  //trying to replicate on line 116 ;line569 alternative
  //          paragraph ("There 6 button events available to program for Pushed or Held actions. HS-WS100+ and HS-WD100+ will map to the 'Pushed' action only as Button1=2TapUp Button2=2TapDown Button3=3TapUp Button4=3TapDown Button5=Press&HoldUp Button6=Press&HoldDown")
  //       }
-        section ("Button Controller Plus Version:1.0.160526.h") {} //version format 1.0.YYMMDD
+        section ("Button Controller Plus Version:1.0.160527") {} //version format 1.0.YYMMDD
 	}
 
 }
@@ -116,7 +117,7 @@ def configureButton6() {
 def getButtonSections(buttonNumber) {
 	return {
  //       log.debug "buttonNumber($buttonNumber)"
-	switch (buttonNumber) {
+	switch (buttonNumber) {  //Hardware specific info help files
    	    	case 1:
   	         	section("Hardware specific info:") {  
             		paragraph ("-For WD100+ or WS100+ devices; this FIRST Button action occurs with a double-tap on upper paddle. *Select 'Pushed' (not Held) actions. -For the Aeon Minimote the FIRST button is upper left when operating in hand.")
