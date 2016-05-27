@@ -16,11 +16,12 @@
   https://github.com/erocm123/SmartThingsPublic/tree/master/devicetypes/erocm123/homeseer-hs-wd100-dimmer-switch.src
       
   Change Log
-  2016-5-26 repo addition, new icon change. 
-            Added 5th, 6th button options to code for HomeSeer switches 6 total functions,
-            renamed Sonos to Speaker to update terminology
-  2016-5-25 initial code modified from @bravenel
-            Added label modifications 
+  2016-05-27 Added Hardware specific button help paragraphs per button
+  2016-05-26 Repo addition, new icon change. 
+             Added new 5th, 6th button options to code for HomeSeer switches 6 total functions,
+             Renamed Sonos to Speaker to update terminology
+  2016-05-25 Initial code modified from @bravenel
+             Added label modifications 
   2015-09-14 Added virtual buttons
  
    Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
