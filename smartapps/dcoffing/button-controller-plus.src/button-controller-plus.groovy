@@ -103,42 +103,75 @@ def selectButton() {
         section() {
         	label title: "Assign a name:", required: false
         }
-        section("More Info on HomeSeer HS-WS100+ HS-WD100+") {
-            paragraph ("There 6 button events available to program for Pushed or Held actions. HS-WS100+ and HS-WD100+ will map to the 'Pushed' action only as Button1=2TapUp Button2=2TapDown Button3=3TapUp Button4=3TapDown Button5=Press&HoldUp Button6=Press&HoldDown")
-        }
-        section ("Button Controller Plus Version:1.0.160526g") {} //version format 1.0.YYMMDD
+ //       section("More Info on HomeSeer HS-WS100+ HS-WD100+") {  //trying to replicate on line 116 ;line569 alternative
+ //          paragraph ("There 6 button events available to program for Pushed or Held actions. HS-WS100+ and HS-WD100+ will map to the 'Pushed' action only as Button1=2TapUp Button2=2TapDown Button3=3TapUp Button4=3TapDown Button5=Press&HoldUp Button6=Press&HoldDown")
+ //       }
+        section ("Button Controller Plus Version:1.0.160526.h") {} //version format 1.0.YYMMDD
 	}
 
 }
 
 def configureButton1() {
-	dynamicPage(name: "configureButton1", title: "Now let's decide how to use the FIRST button (2TapUp)... ",
+	dynamicPage(name: "configureButton1", title: "Now let's decide how to use the FIRST button... ",
 		nextPage: "configureButton2", uninstall: configured(), getButtonSections(1))          
 }
 def configureButton2() {
-	dynamicPage(name: "configureButton2", title: "If you have a SECOND button (2TapDown), set it up here or 'Next'",
+	dynamicPage(name: "configureButton2", title: "If you have a SECOND button, set it up here or 'Next'",
 		nextPage: "configureButton3", uninstall: configured(), getButtonSections(2))
 }
 def configureButton3() {
-	dynamicPage(name: "configureButton3", title: "If you have a THIRD button (3TapUp), set it up here or 'Next'",
+	dynamicPage(name: "configureButton3", title: "If you have a THIRD button, set it up here or 'Next'",
 		nextPage: "configureButton4", uninstall: configured(), getButtonSections(3))
 }
 def configureButton4() {
-	dynamicPage(name: "configureButton4", title: "If you have a FOURTH button (3TapDown), set it up here or 'Next'",
+	dynamicPage(name: "configureButton4", title: "If you have a FOURTH button, set it up here or 'Next'",
 		nextPage: "configureButton5", uninstall: configured(), getButtonSections(4))
 }
 def configureButton5() {
-	dynamicPage(name: "configureButton5", title: "If you have a FIFTH button (Press&HoldUp), set it up here or 'Next'",
+	dynamicPage(name: "configureButton5", title: "If you have a FIFTH button, set it up here or 'Next'",
 		nextPage: "configureButton6", uninstall: configured(), getButtonSections(5))
 }
 def configureButton6() {
-	dynamicPage(name: "configureButton6", title: "If you have a SIXTH button (Press&HoldDown), set it up or 'Next'",
+	dynamicPage(name: "configureButton6", title: "If you have a SIXTH button, set it up here or 'Next'",
 		install: true, uninstall: true, getButtonSections(6))
 }
 
 def getButtonSections(buttonNumber) {
 	return {
-    
+ //       log.debug "buttonNumber($buttonNumber)"
+		switch (buttonNumber) {
+   	    	case 1:
+  	         	section("Hardware specific info:") {  
+            		paragraph ("-For WD100+ or WS100+ devices; this FIRST Button action occurs with a double-tap on upper paddle. *Select 'Pushed' (not Held) actions. -For the Aeon Minimote the FIRST button is upper left when operating in hand.")
+        		}
+                break
+        	case 2:
+            	section("Hardware specific info:") {  
+           			paragraph ("-For WD100+ or WS100+ devices; this SECOND Button action occurs with a double-tap on lower paddle. *Select 'Pushed' (not Held) actions. -For the Aeon Minimote the SECOND button is upper right when operating in hand.") 		
+        		}
+                break
+        	case 3:
+            	section("Hardware specific info:") {  
+           			paragraph ("-For WD100+ or WS100+ devices; this THIRD Button action occurs with a triple-tap on upper paddle. *Select 'Pushed' (not Held) actions. -For the Aeon Minimote the THIRD button is lower left when operating in hand.") 		
+        		}
+                break
+        	case 4:
+            	section("Hardware specific info:") {  
+           			paragraph ("-For WD100+ or WS100+ devices; this FOURTH Button action occurs with a triple-tap on lower paddle. *Select 'Pushed' (not Held) actions. -For the Aeon Minimote the FOURTH button is lower right when operating in hand.") 		 		
+        		}
+                break
+        	case 5:
+            	section("Hardware specific info:") {  
+           			paragraph ("-For WD100+ or WS100+ devices; this FIFTH Button action occurs with a press & hold on lower paddle. *Select 'Pushed' (not Held) actions.") 		
+        		}
+                break
+        	case 6:
+            	section("Hardware specific info:") {  
+           			paragraph ("-For WD100+ or WS100+ devices; this SIXTH Button action occurs with a press & hold on lower paddle. *Select 'Pushed' (not Held) actions.") 		
+        		}
+                break
+        }        	
+      
 		section("Lights to Toggle") {
 			input "lights_${buttonNumber}_pushed", "capability.switch", title: "Pushed", multiple: true, required: false
 			input "lights_${buttonNumber}_held", "capability.switch", title: "Held", multiple: true, required: false
@@ -563,4 +596,18 @@ private hideOptionsSection() {
 
 private timeIntervalLabel() {
 	(starting && ending) ? hhmm(starting) + "-" + hhmm(ending, "h:mm a z") : ""
+}
+
+
+private def helpButton1() {
+    def text =
+" HS-WS100+ and HS-WD100+ Button Mappings " +
+"   Action		 Button#	Button Action    " +
+"---------------------------------------  " +
+"Double-Tap Up		1	   pressed        " +
+"Double-Tap Down	2	   pressed			" +
+"Triple-Tap Up		3	   pressed			" +
+"Triple-Tap Down	4	   pressed			" +
+"Hold Up		   	5	   pressed			" +
+"Hold Down	    	6	   pressed			" 
 }
