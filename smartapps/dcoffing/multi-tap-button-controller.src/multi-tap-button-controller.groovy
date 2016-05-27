@@ -1,6 +1,6 @@
 /**
    Multi-Tap Button Controller for HomeSeer 
-   Copyright 2016  Author: SmartThings, modified by Dale Coffing
+   Copyright 2016  Author: bravenel,  modified by Dale Coffing
    
    This smartapp allows the multi-tap functions of the HomeSeer HS-WD100+ and HS-WS100+ 
    so the double-tap, triple-tap, press & hold functionality can trigger up to 6 events. 
@@ -16,7 +16,7 @@
       
   Change Log
   2016-5-26 repo addition, new icon change
-  2016-5-25 initial code modified from SmartThings Button Controller
+  2016-5-25 initial code from bravenel Scene Controller
             added label modifications 
  
    Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -44,7 +44,7 @@ Hold Down	    	6	   pressed
 definition(
     name: "Multi-Tap Button Controller",
     namespace: "dcoffing",
-    author: "SmartThings, Dale Coffing",
+    author: "bravenel, Dale Coffing",
     description: "Control devices with multi-tap functionality of HomeSeer HS-WS100+ or HS-WD100+",
     category: "My Apps",
     iconUrl: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/multi-tap-button-controller.src/MultiTapIcon125x125.png",
@@ -58,23 +58,30 @@ preferences {
 	page(name: "configureButton2")
 	page(name: "configureButton3")
 	page(name: "configureButton4")
-
+	
 	page(name: "timeIntervalInput", title: "Only during a certain time") {
 		section {
 			input "starting", "time", title: "Starting", required: false
 			input "ending", "time", title: "Ending", required: false
 		}
 	}
+    
+//    page(name: "dateIntervalInput", title: "Only between these dates") {
+//    	section {
+//        	input "startingdate", "date", title: "Starting Date   mm-dd", required: false
+//            input "endingdate", "date", title: "Ending Date   mm-dd", required: false
+//        }
+//    }
 }
 
 def selectButton() {
-	dynamicPage(name: "selectButton", title: "First, select your Multi-tap switch device", nextPage: "configureButton1", uninstall: configured()) {
+	dynamicPage(name: "selectButton", title: "First, select your button device", nextPage: "configureButton1", uninstall: configured()) {
 		section {
-			input "buttonDevice", "capability.button", title: "Multi-tap switch device", multiple: false, required: true
+			input "buttonDevice", "capability.button", title: "MiniMote", multiple: false, required: false
 		}
-
-		section(title: "More Advanced options", hidden: hideOptionsSection(), hideable: true) {
-
+		
+		section(title: "More options", hidden: hideOptionsSection(), hideable: true) { 
+			
 			def timeLabel = timeIntervalLabel()
 
 			href "timeIntervalInput", title: "Only during a certain time", description: timeLabel ?: "Tap to set", state: timeLabel ? "complete" : null
@@ -84,77 +91,92 @@ def selectButton() {
 
 			input "modes", "mode", title: "Only when mode is", multiple: true, required: false
             
-       		label title: "Assign a name", required: false 
-		}        
-        section ("Multi-Tap Button Controller - Version 0.0.160526b") {}
+//            href "dateIntervalInput", title: "Only between two dates", description: dateLabel ?: "Tap to set", state: dateLabel ? "complete" : null
+		}
+        section() {
+        	label title: "Assign a name:", required: false
+        }
 	}
 }
 
 def configureButton1() {
-	dynamicPage(name: "configureButton1", title: "Now let's decide how to use the first button",
+	dynamicPage(name: "configureButton1", title: "Set up the first button",
 		nextPage: "configureButton2", uninstall: configured(), getButtonSections(1))
 }
 def configureButton2() {
-	dynamicPage(name: "configureButton2", title: "If you have a second button, set it up here",
+	dynamicPage(name: "configureButton2", title: "Set up the second button",
 		nextPage: "configureButton3", uninstall: configured(), getButtonSections(2))
 }
 
 def configureButton3() {
-	dynamicPage(name: "configureButton3", title: "If you have a third button, you can do even more here",
+	dynamicPage(name: "configureButton3", title: "Set up the third button",
 		nextPage: "configureButton4", uninstall: configured(), getButtonSections(3))
 }
 def configureButton4() {
-	dynamicPage(name: "configureButton4", title: "If you have a fourth button, you rule, and can set it up here",
+	dynamicPage(name: "configureButton4", title: "Set up the fourth button",
 		install: true, uninstall: true, getButtonSections(4))
 }
 
 def getButtonSections(buttonNumber) {
 	return {
-		section("Lights") {
+    	section("Button number $buttonNumber") { } //correct for ST bug with page title
+		section("Lights to Toggle") {
 			input "lights_${buttonNumber}_pushed", "capability.switch", title: "Pushed", multiple: true, required: false
 			input "lights_${buttonNumber}_held", "capability.switch", title: "Held", multiple: true, required: false
 		}
-		section("Locks") {
-			input "locks_${buttonNumber}_pushed", "capability.lock", title: "Pushed", multiple: true, required: false
-			input "locks_${buttonNumber}_held", "capability.lock", title: "Held", multiple: true, required: false
+		section("Lights to Turn On") {
+			input "lightOn_${buttonNumber}_pushed", "capability.switch", title: "Pushed", multiple: true, required: false
+			input "lightOn_${buttonNumber}_held", "capability.switch", title: "Held", multiple: true, required: false
 		}
-		section("Sonos") {
-			input "sonos_${buttonNumber}_pushed", "capability.musicPlayer", title: "Pushed", multiple: true, required: false
-			input "sonos_${buttonNumber}_held", "capability.musicPlayer", title: "Held", multiple: true, required: false
+        section("Lights to Turn Off") {
+			input "lightOff_${buttonNumber}_pushed", "capability.switch", title: "Pushed", multiple: true, required: false
+			input "lightOff_${buttonNumber}_held", "capability.switch", title: "Held", multiple: true, required: false
 		}
-		section("Modes") {
+        section("Lights to Dim Level 1") {
+			input "lightDim_${buttonNumber}_pushed", "capability.switchLevel", title: "Pushed", multiple: true, required: false
+			input "lightVal_${buttonNumber}_pushed", "number", title: "Dim Level 1", multiple: false, required: false, description: "0 to 99"
+			input "lightDim_${buttonNumber}_held", "capability.switchLevel", title: "Held", multiple: true, required: false
+			input "lightVal_${buttonNumber}_held", "number", title: "Dim Level 1", multiple: false, required: false, description: "0 to 99"
+		}
+        section("Lights to Dim Level 2") {
+			input "lightD2m_${buttonNumber}_pushed", "capability.switchLevel", title: "Pushed", multiple: true, required: false
+			input "lightV2l_${buttonNumber}_pushed", "number", title: "Dim Level 2", multiple: false, required: false, description: "0 to 99"
+			input "lightD2m_${buttonNumber}_held", "capability.switchLevel", title: "Held", multiple: true, required: false
+			input "lightV2l_${buttonNumber}_held", "number", title: "Dim Level 2", multiple: false, required: false, description: "0 to 99"
+		}
+        section("Fan to Adjust Speed") {
+			input "autoFanAdjust_${buttonNumber}_pushed", "capability.switchLevel", title: "Pushed", multiple: false, required: false
+			input "autoFanAdjust_${buttonNumber}_held", "capability.switchLevel", title: "Held", multiple: false, required: false
+        }
+        section("Shades to Adjust") {
+        	input "shadesAdjust_${buttonNumber}_pushed", "capability.doorControl", title: "Pushed", multiple: false, required: false
+			input "shadesAdjust_${buttonNumber}_held", "capability.doorControl", title: "Held", multiple: false, required: false
+        }
+//		section("Locks") {
+//			input "locks_${buttonNumber}_pushed", "capability.lock", title: "Pushed", multiple: true, required: false
+//			input "locks_${buttonNumber}_held", "capability.lock", title: "Held", multiple: true, required: false
+//		}
+//		section("Sonos") {
+//			input "sonos_${buttonNumber}_pushed", "capability.musicPlayer", title: "Pushed", multiple: true, required: false
+//			input "sonos_${buttonNumber}_held", "capability.musicPlayer", title: "Held", multiple: true, required: false
+//		}
+		section("Mode to Set") {
 			input "mode_${buttonNumber}_pushed", "mode", title: "Pushed", required: false
 			input "mode_${buttonNumber}_held", "mode", title: "Held", required: false
 		}
 		def phrases = location.helloHome?.getPhrases()*.label
 		if (phrases) {
-			section("Hello Home Actions") {
+			section("Hello Home Action to Take") {
 				log.trace phrases
 				input "phrase_${buttonNumber}_pushed", "enum", title: "Pushed", required: false, options: phrases
 				input "phrase_${buttonNumber}_held", "enum", title: "Held", required: false, options: phrases
 			}
 		}
-        section("Sirens") {
-            input "sirens_${buttonNumber}_pushed","capability.alarm" ,title: "Pushed", multiple: true, required: false
-            input "sirens_${buttonNumber}_held", "capability.alarm", title: "Held", multiple: true, required: false
+        section("Associate a Momentary Button"){
+        	input "virtB_${buttonNumber}_pushed","capability.momentary",title: "Pushed", required: false
+            input "virtB_${buttonNumber}_held","capability.momentary",title: "Held", required: false
         }
-
-		section("Custom Message") {
-			input "textMessage_${buttonNumber}", "text", title: "Message", required: false
-		}
-
-        section("Push Notifications") {
-            input "notifications_${buttonNumber}_pushed","bool" ,title: "Pushed", required: false, defaultValue: false
-            input "notifications_${buttonNumber}_held", "bool", title: "Held", required: false, defaultValue: false
-        }
-
-        section("Sms Notifications") {
-            input "phone_${buttonNumber}_pushed","phone" ,title: "Pushed", required: false
-            input "phone_${buttonNumber}_held", "phone", title: "Held", required: false
-        }
-       
 	}
-     
 }
 
 def installed() {
@@ -168,6 +190,17 @@ def updated() {
 
 def initialize() {
 	subscribe(buttonDevice, "button", buttonEvent)
+    subscribe(virtB_1_pushed,"momentary.pushed",fakebutton1Event)
+    subscribe(virtB_2_pushed,"momentary.pushed",fakebutton2Event)
+    subscribe(virtB_3_pushed,"momentary.pushed",fakebutton3Event)
+    subscribe(virtB_4_pushed,"momentary.pushed",fakebutton4Event)
+    subscribe(virtB_1_held,"momentary.pushed",fakebutton1hEvent)
+    subscribe(virtB_2_held,"momentary.pushed",fakebutton2hEvent)
+    subscribe(virtB_3_held,"momentary.pushed",fakebutton3hEvent)
+    subscribe(virtB_4_held,"momentary.pushed",fakebutton4hEvent)
+    state.goingUp = true
+    state.lastshadesUp = true
+//    log.debug "Scene Controller Dates are $startingdate and $endingdate"
 }
 
 def configured() {
@@ -176,13 +209,49 @@ def configured() {
 
 def buttonConfigured(idx) {
 	return settings["lights_$idx_pushed"] ||
+    	settings["lightOn_$idx_pushed"] ||
+    	settings["lightOff_$idx_pushed"] ||
+        settings["lightDim_$idx_pushed"] ||
+        settings["lightVal_$idx_pushed"] ||
+        settings["lightD2m_$idx_pushed"] ||
+        settings["lightV2l_$idx_pushed"] ||
+        settings["autoFanAdjust_$idx_pushed"] ||
+        settings["shadesAdjust_$idx_pushed"] ||
 		settings["locks_$idx_pushed"] ||
 		settings["sonos_$idx_pushed"] ||
-		settings["mode_$idx_pushed"] ||
-        settings["notifications_$idx_pushed"] ||
-        settings["sirens_$idx_pushed"] ||
-        settings["notifications_$idx_pushed"]   ||
-        settings["phone_$idx_pushed"]
+		settings["mode_$idx_pushed"]
+}
+
+def fakebutton1Event(evt) {
+    executeHandlers(1, "pushed")
+}
+
+def fakebutton2Event(evt) {
+    executeHandlers(2, "pushed")
+}
+
+def fakebutton3Event(evt) {
+    executeHandlers(3, "pushed")
+}
+
+def fakebutton4Event(evt) {
+    executeHandlers(4, "pushed")
+}
+
+def fakebutton1hEvent(evt) {
+    executeHandlers(1, "held")
+}
+
+def fakebutton2hEvent(evt) {
+    executeHandlers(2, "held")
+}
+
+def fakebutton3hEvent(evt) {
+    executeHandlers(3, "held")
+}
+
+def fakebutton4hEvent(evt) {
+    executeHandlers(4, "held")
 }
 
 def buttonEvent(evt){
@@ -191,10 +260,10 @@ def buttonEvent(evt){
 		def value = evt.value
 		log.debug "buttonEvent: $evt.name = $evt.value ($evt.data)"
 		log.debug "button: $buttonNumber, value: $value"
-
+	
 		def recentEvents = buttonDevice.eventsSince(new Date(now() - 3000)).findAll{it.value == evt.value && it.data == evt.data}
 		log.debug "Found ${recentEvents.size()?:0} events in past 3 seconds"
-
+	
 		if(recentEvents.size <= 1){
 			switch(buttonNumber) {
 				case ~/.*1.*/:
@@ -220,70 +289,117 @@ def executeHandlers(buttonNumber, value) {
 	log.debug "executeHandlers: $buttonNumber - $value"
 
 	def lights = find('lights', buttonNumber, value)
-	if (lights != null) toggle(lights)
+	if (lights) toggle(lights)
 
+	def lights1 = find('lightOn', buttonNumber, value)
+	if (lights1) turnOn(lights1)
+
+	def lights2 = find('lightOff', buttonNumber, value)
+	if (lights2) turnOff(lights2)
+
+	def lights3 = find('lightDim', buttonNumber, value)
+    def dimval3 = find('lightVal', buttonNumber, value)
+	if (lights3) turnDim(lights3,dimval3)
+
+	def lights4 = find('lightD2m', buttonNumber, value)
+    def dimval4 = find('lightV2l', buttonNumber, value)
+	if (lights4) turnDim(lights4,dimval4)
+
+	def fan = find('autoFanAdjust', buttonNumber, value)
+    if (fan) adjustFan(fan)
+    
+    def shade = find('shadesAdjust', buttonNumber, value)
+    if (shade) adjustShade(shade)
+    
 	def locks = find('locks', buttonNumber, value)
-	if (locks != null) toggle(locks)
+	if (locks) toggle(locks)
 
 	def sonos = find('sonos', buttonNumber, value)
-	if (sonos != null) toggle(sonos)
+	if (sonos) toggle(sonos)
 
 	def mode = find('mode', buttonNumber, value)
-	if (mode != null) changeMode(mode)
+	if (mode) changeMode(mode)
 
 	def phrase = find('phrase', buttonNumber, value)
-	if (phrase != null) location.helloHome.execute(phrase)
-
-	def textMessage = findMsg('textMessage', buttonNumber)
-
-	def notifications = find('notifications', buttonNumber, value)
-	if (notifications?.toBoolean()) sendPush(textMessage ?: "Button $buttonNumber was pressed" )
-
-	def phone = find('phone', buttonNumber, value)
-	if (phone != null) sendSms(phone, textMessage ?:"Button $buttonNumber was pressed")
-
-    def sirens = find('sirens', buttonNumber, value)
-    if (sirens != null) toggle(sirens)
+	if (phrase) location.helloHome.execute(phrase)
 }
 
 def find(type, buttonNumber, value) {
 	def preferenceName = type + "_" + buttonNumber + "_" + value
 	def pref = settings[preferenceName]
-	if(pref != null) {
+	if(pref) {
 		log.debug "Found: $pref for $preferenceName"
 	}
 
 	return pref
 }
 
-def findMsg(type, buttonNumber) {
-	def preferenceName = type + "_" + buttonNumber
-	def pref = settings[preferenceName]
-	if(pref != null) {
-		log.debug "Found: $pref for $preferenceName"
-	}
+def turnOn(devices) {
+	log.debug "turnOn: $devices = ${devices*.currentSwitch}"
 
-	return pref
+	devices.on()
+}
+
+def turnOff(devices) {
+	log.debug "turnOff: $devices = ${devices*.currentSwitch}"
+
+	devices.off()
+}
+
+def turnDim(devices, level) {
+	log.debug "turnDim: $devices = ${devices*.currentSwitch}"
+
+	devices.setLevel(level)
+}
+
+def adjustFan(device) { // for 3 speed ceiling fans
+	log.debug "adjust: $device = ${device.currentLevel}"
+    
+    def currentLevel = device.currentLevel
+
+    if(device.currentSwitch == 'off') {
+    	device.setLevel(15)
+        state.goingUp = true
+    } else if (currentLevel < 34) {
+    	if(state.goingUp) device.setLevel(50)
+    	else device.off()
+  	} else if (currentLevel < 67) {
+  		if (state.goingUp) device.setLevel(90)
+        else device.setLevel(15)
+    } else {
+    	device.setLevel(50)
+      	state.goingUp = false
+    }
+}
+
+def adjustShade(device) { // works with Aeon Motor Controller device type
+	log.debug "shades: $device = ${device.currentMotor} state.lastUP = $state.lastshadesUp"
+
+	if(device.currentMotor in ["up","down"]) {
+    	state.lastshadesUp = device.currentMotor == "up"
+    	device.stop()
+    } else {
+    	if(state.lastshadesUp) device.down()
+        else device.up()
+        state.lastshadesUp = !state.lastshadesUp
+    }
 }
 
 def toggle(devices) {
-	log.debug "toggle: $devices = ${devices*.currentValue('switch')}"
+	log.debug "toggle: $devices = ${devices*.currentSwitch}"
 
-	if (devices*.currentValue('switch').contains('on')) {
+	if (devices*.currentSwitch.contains('on')) {
 		devices.off()
 	}
-	else if (devices*.currentValue('switch').contains('off')) {
+	else if (devices*.currentSwitch.contains('off')) {
 		devices.on()
 	}
-	else if (devices*.currentValue('lock').contains('locked')) {
+	else if (devices*.currentLock.contains('locked')) {
 		devices.unlock()
 	}
-	else if (devices*.currentValue('lock').contains('unlocked')) {
+	else if (devices*.currentLock.contains('unlocked')) {
 		devices.lock()
 	}
-	else if (devices*.currentValue('alarm').contains('off')) {
-        devices.siren()
-    }
 	else {
 		devices.on()
 	}

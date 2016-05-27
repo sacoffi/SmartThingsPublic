@@ -17,7 +17,8 @@
       
   Change Log
   2016-5-26 repo addition, new icon change. 
-            Added 5th, 6th buttons for HomeSeer switches extra functions for press&hold.
+            Added 5th, 6th button options to code for HomeSeer switches 6 total functions,
+            renamed Sonos to Speaker to update terminology
   2016-5-25 initial code modified from @bravenel
             Added label modifications 
   2015-09-14 Added virtual buttons
@@ -102,36 +103,36 @@ def selectButton() {
         section() {
         	label title: "Assign a name:", required: false
         }
-        section("Help About") {
-            paragraph helpButton1()
+        section("More Info on HomeSeer HS-WS100+ HS-WD100+") {
+            paragraph ("There 6 button events available to program for Pushed or Held actions. HS-WS100+ and HS-WD100+ will map to the 'Pushed' action only as Button1=2TapUp Button2=2TapDown Button3=3TapUp Button4=3TapDown Button5=Press&HoldUp Button6=Press&HoldDown")
         }
-        section ("Button Controller Plus Version:1.0.160526f") {} //version format 1.0.YYMMDD
+        section ("Button Controller Plus Version:1.0.160526g") {} //version format 1.0.YYMMDD
 	}
 
 }
 
 def configureButton1() {
-	dynamicPage(name: "configureButton1", title: "Now let's decide how to use the first button... ",
+	dynamicPage(name: "configureButton1", title: "Now let's decide how to use the FIRST button (2TapUp)... ",
 		nextPage: "configureButton2", uninstall: configured(), getButtonSections(1))          
 }
 def configureButton2() {
-	dynamicPage(name: "configureButton2", title: "If you have a second button (2TapDown, Home), set it up here",
+	dynamicPage(name: "configureButton2", title: "If you have a SECOND button (2TapDown), set it up here or 'Next'",
 		nextPage: "configureButton3", uninstall: configured(), getButtonSections(2))
 }
 def configureButton3() {
-	dynamicPage(name: "configureButton3", title: "If you have a third button (3TapUp), you can do even more here",
+	dynamicPage(name: "configureButton3", title: "If you have a THIRD button (3TapUp), set it up here or 'Next'",
 		nextPage: "configureButton4", uninstall: configured(), getButtonSections(3))
 }
 def configureButton4() {
-	dynamicPage(name: "configureButton4", title: "If you have a fourth button (3TapDown), you can set it up here",
+	dynamicPage(name: "configureButton4", title: "If you have a FOURTH button (3TapDown), set it up here or 'Next'",
 		nextPage: "configureButton5", uninstall: configured(), getButtonSections(4))
 }
 def configureButton5() {
-	dynamicPage(name: "configureButton5", title: "If you have a fifth button (Press&HoldUp), you can set it up here",
+	dynamicPage(name: "configureButton5", title: "If you have a FIFTH button (Press&HoldUp), set it up here or 'Next'",
 		nextPage: "configureButton6", uninstall: configured(), getButtonSections(5))
 }
 def configureButton6() {
-	dynamicPage(name: "configureButton6", title: "If you have a sixth button (Press&HoldDown), you can set it up here",
+	dynamicPage(name: "configureButton6", title: "If you have a SIXTH button (Press&HoldDown), set it up or 'Next'",
 		install: true, uninstall: true, getButtonSections(6))
 }
 
@@ -180,9 +181,9 @@ def getButtonSections(buttonNumber) {
 			input "locks_${buttonNumber}_pushed", "capability.lock", title: "Pushed", multiple: true, required: false
 			input "locks_${buttonNumber}_held", "capability.lock", title: "Held", multiple: true, required: false
 		}
-		section("Sonos") {
-			input "sonos_${buttonNumber}_pushed", "capability.musicPlayer", title: "Pushed", multiple: true, required: false
-			input "sonos_${buttonNumber}_held", "capability.musicPlayer", title: "Held", multiple: true, required: false
+		section("Speaker music player") {
+			input "speaker_${buttonNumber}_pushed", "capability.musicPlayer", title: "Pushed", multiple: true, required: false
+			input "speaker_${buttonNumber}_held", "capability.musicPlayer", title: "Held", multiple: true, required: false
 		}
 		section("Modes") {
 			input "mode_${buttonNumber}_pushed", "mode", title: "Pushed", required: false
@@ -265,7 +266,7 @@ def buttonConfigured(idx) {
         settings["fanAdjust_$idx_pushed"] ||
         settings["shadeAdjust_$idx_pushed"] ||
 		settings["locks_$idx_pushed"] ||
-		settings["sonos_$idx_pushed"] ||
+		settings["speaker_$idx_pushed"] ||
 		settings["mode_$idx_pushed"] ||
         settings["notifications_$idx_pushed"] ||
         settings["sirens_$idx_pushed"] ||
@@ -389,8 +390,8 @@ def executeHandlers(buttonNumber, value) {
 	def locks = find('locks', buttonNumber, value)
 	if (locks) toggle(locks)
 
-	def sonos = find('sonos', buttonNumber, value)
-	if (sonos) toggle(sonos)
+	def speaker = find('speaker', buttonNumber, value)
+	if (speaker) toggle(speaker)
 
 	def mode = find('mode', buttonNumber, value)
 	if (mode) changeMode(mode)
