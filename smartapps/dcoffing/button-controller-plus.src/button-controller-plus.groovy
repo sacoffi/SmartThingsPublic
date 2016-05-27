@@ -14,7 +14,7 @@
   @erocm1231
   https://github.com/erocm123/SmartThingsPublic/tree/master/devicetypes/erocm123/homeseer-hs-wd100-dimmer-switch.src
       
-  Change Log
+  Change Log.
   2016-05-27 Added Hardware specific button help paragraphs per button
   2016-05-26 Repo addition, new icon change. 
              Added new 5th, 6th button options to code for HomeSeer switches 6 total functions,
