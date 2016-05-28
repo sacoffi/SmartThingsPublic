@@ -19,7 +19,7 @@
   2016-05-26 Repo addition, new icon change. 
              Added new 5th, 6th button options to code for HomeSeer switches 6 total functions,
              Renamed Sonos to Speaker to update terminology
-  2016-05-25 Initial code modified from @bravenel
+  2016-05-25 Initial code modified from @bravenel Button Controller+
              Added label modifications 
   2015-09-14 Added virtual buttons
  
