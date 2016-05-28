@@ -15,7 +15,7 @@
   https://github.com/erocm123/SmartThingsPublic/tree/master/devicetypes/erocm123/homeseer-hs-wd100-dimmer-switch.src
       
   Change Log
-  2016-05-28 Minor text changes to screens
+  2016-05-28 Minor text changes to screens, paragraph separtion for devices
   2016-05-27 Added Hardware specific button help paragraphs per button
   2016-05-26 Repo addition, new icon change. 
              Added new 5th, 6th button options to code for HomeSeer switches 6 total functions,
@@ -82,7 +82,7 @@ def selectButton() {
         	label title: "Assign a name:", required: false
         }
 //VERSION 
-        section ("Button Controller Plus Version:1.0.160528") {} //version format 1.0.YYMMDD
+        section ("Button Controller Plus Version:1.0.160528a") {} //version format 1.0.YYMMDD
 	}
 }
 
@@ -123,18 +123,22 @@ def getButtonSections(buttonNumber) {
                 	break
         	case 2:
             		section("Hardware specific info:") {  
-           		paragraph ("-For WD100+ or WS100+ devices; this SECOND Button action occurs with a double-tap on lower paddle. *Select 'Pushed' (not Held) actions. -For the Aeon Minimote the SECOND button is upper right when operating in hand.") 		
-        		}
+           		paragraph ("-For WD100+ or WS100+ devices; this SECOND Button action occurs with a double-tap on lower paddle. *Select 'Pushed' (not Held) actions.")	
+        		paragraph ("-For the Aeon Minimote the SECOND button is upper right when operating in hand.") 	
+            			
+            		}
                 	break
         	case 3:
             		section("Hardware specific info:") {  
-           		paragraph ("-For WD100+ or WS100+ devices; this THIRD Button action occurs with a triple-tap on upper paddle. *Select 'Pushed' (not Held) actions. -For the Aeon Minimote the THIRD button is lower left when operating in hand.") 		
+           		paragraph ("-For WD100+ or WS100+ devices; this THIRD Button action occurs with a triple-tap on upper paddle. *Select 'Pushed' (not Held) actions.")
+           		paragraph ("-For the Aeon Minimote the THIRD button is lower left when operating in hand.") 
         		}
                 	break
         	case 4:
             		section("Hardware specific info:") {  
-           		paragraph ("-For WD100+ or WS100+ devices; this FOURTH Button action occurs with a triple-tap on lower paddle. *Select 'Pushed' (not Held) actions. -For the Aeon Minimote the FOURTH button is lower right when operating in hand.") 		 		
-        		}
+           		paragraph ("-For WD100+ or WS100+ devices; this FOURTH Button action occurs with a triple-tap on lower paddle. *Select 'Pushed' (not Held) actions.") 		 		
+        		paragraph ("-For the Aeon Minimote the FOURTH button is lower right when operating in hand.")
+            		}
                 	break
         	case 5:
             		section("Hardware specific info:") {  
