@@ -116,7 +116,8 @@ def getButtonSections(buttonNumber) {
 	switch (buttonNumber) {
    	    	case 1:
   	         	section("Hardware specific info:") {  
-            		paragraph ("-For WD100+ or WS100+ devices; this FIRST Button action occurs with a double-tap on upper paddle. *Select 'Pushed' (not Held) actions. -For the Aeon Minimote the FIRST button is upper left when operating in hand.")
+            		paragraph ("- WD100+ or WS100+ devices; this FIRST Button action occurs with a double-tap on upper paddle. *Select 'Pushed' (not Held) actions.") +
+                    		  (" -For the Aeon Minimote the FIRST button is upper left when operating in hand.")
         		}
                 	break
         	case 2:
