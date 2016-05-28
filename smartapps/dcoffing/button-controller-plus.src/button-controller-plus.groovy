@@ -14,7 +14,8 @@
   @erocm1231
   https://github.com/erocm123/SmartThingsPublic/tree/master/devicetypes/erocm123/homeseer-hs-wd100-dimmer-switch.src
       
-  Change Log.
+  Change Log
+  2016-05-28 Minor text changes to screens
   2016-05-27 Added Hardware specific button help paragraphs per button
   2016-05-26 Repo addition, new icon change. 
              Added new 5th, 6th button options to code for HomeSeer switches 6 total functions,
@@ -81,7 +82,7 @@ def selectButton() {
         	label title: "Assign a name:", required: false
         }
 //VERSION 
-        section ("Button Controller Plus Version:1.0.160527") {} //version format 1.0.YYMMDD
+        section ("Button Controller Plus Version:1.0.160528") {} //version format 1.0.YYMMDD
 	}
 }
 
@@ -117,7 +118,7 @@ def getButtonSections(buttonNumber) {
    	    	case 1:
   	         	section("Hardware specific info:") {  
             		paragraph ("- WD100+ or WS100+ devices; this FIRST Button action occurs with a double-tap on upper paddle. *Select 'Pushed' (not Held) actions.") +
-                    		  (" -For the Aeon Minimote the FIRST button is upper left when operating in hand.")
+                    	paragraph (" -For the Aeon Minimote the FIRST button is upper left when operating in hand.")
         		}
                 	break
         	case 2:
