@@ -1,21 +1,20 @@
-/**
- 	Button Controller Plus
-  	Copyright 2016  Author: SmartThings, modified by Bruce Ravenel, modified by Dale Coffing 
+/** 
+	Button Controller Plus
+  	Copyright 2016  Author: SmartThings, modified by Bruce Ravenel, Dale Coffing 
        
    Control devices using the buttons of an Aeon Minimote, Key Fob, or HomeSeer WD100+ and WS100+
    multi-tap features so the double-tap, triple-tap, press & hold functionality can trigger 
-   up to 6 home automation events. This was modified from the original Button Controller
-   by SmartThings adding many new capabilites.
+   up to 6 home automation events. 
    
-   The HomeSeer HS-WD100+ or HS-WS100+ needs device handlers that expose the multi-tap features
-   such as:
+   The HomeSeer HS-WD100+ or HS-WS100+ needs device handlers installed that expose the 
+   multi-tap features such as:
   @darwin 
   https://github.com/DarwinsDen/SmartThingsPublic/tree/master/devicetypes/darwinsden/wd100-dimmer.src
   @erocm1231
   https://github.com/erocm123/SmartThingsPublic/tree/master/devicetypes/erocm123/homeseer-hs-wd100-dimmer-switch.src
       
   Change Log
-  2016-05-28 Minor text changes to screens, paragraph separtion for devices
+  2016-05-28 Minor text, typo changes to screens, paragraph separation for devices
   2016-05-27 Added Hardware specific button help paragraphs per button
   2016-05-26 Repo addition, new icon change. 
              Added new 5th, 6th button options to code for HomeSeer switches 6 total functions,
@@ -28,7 +27,8 @@
    in compliance with the License. You may obtain a copy of the License at: www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
    on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
-   for the specific language governing permissions and limitations under the License.
+   for the specific language governing permissions and limitations under the License.Button Controller Plus
+ 	
  
 */
   
@@ -82,7 +82,7 @@ def selectButton() {
         	label title: "Assign a name:", required: false
         }
 //VERSION 
-        section ("Button Controller Plus Version:1.0.160528a") {} //version format 1.0.YYMMDD
+        section ("Button Controller Plus Version:1.0.160529") {} //version format 1.0.YYMMDD
 	}
 }
 
@@ -116,37 +116,37 @@ def getButtonSections(buttonNumber) {
  //       log.debug "buttonNumber($buttonNumber)"
 	switch (buttonNumber) {
    	    	case 1:
-  	         	section("Hardware specific info:") {  
-            		paragraph ("- WD100+ or WS100+ devices; this FIRST Button action occurs with a double-tap on upper paddle. *Select 'Pushed' (not Held) actions.") +
-                    	paragraph (" -For the Aeon Minimote the FIRST button is upper left when operating in hand.")
+  	         	section("Hardware specific info on button selection:") {  
+            		paragraph ("-For WD100+ or WS100+ devices; this FIRST Button action occurs with a double-tap on upper paddle. *Select 'Pushed' (not Held) .") +
+                    	paragraph ("-For Aeon Minimote device; the FIRST button is upper left when operating in hand.'Pushed' and/or 'Held' actions")
         		}
                 	break
         	case 2:
-            		section("Hardware specific info:") {  
+            		section("Hardware specific info on button selection:") {  
            		paragraph ("-For WD100+ or WS100+ devices; this SECOND Button action occurs with a double-tap on lower paddle. *Select 'Pushed' (not Held) actions.")	
-        		paragraph ("-For the Aeon Minimote the SECOND button is upper right when operating in hand.") 	
+        		paragraph ("-For Aeon Minimote device; the SECOND button is upper right when operating in hand.'Pushed' and/or 'Held' actions") 	
             			
             		}
                 	break
         	case 3:
-            		section("Hardware specific info:") {  
+            		section("Hardware specific info on button selection:") {  
            		paragraph ("-For WD100+ or WS100+ devices; this THIRD Button action occurs with a triple-tap on upper paddle. *Select 'Pushed' (not Held) actions.")
-           		paragraph ("-For the Aeon Minimote the THIRD button is lower left when operating in hand.") 
+           		paragraph ("-For Aeon Minimote device; the THIRD button is lower left when operating in hand.'Pushed' and/or 'Held' actions") 
         		}
                 	break
         	case 4:
-            		section("Hardware specific info:") {  
+            		section("Hardware specific info on button selection:") {  
            		paragraph ("-For WD100+ or WS100+ devices; this FOURTH Button action occurs with a triple-tap on lower paddle. *Select 'Pushed' (not Held) actions.") 		 		
-        		paragraph ("-For the Aeon Minimote the FOURTH button is lower right when operating in hand.")
+        		paragraph ("-For Aeon Minimote device; the FOURTH button is lower right when operating in hand.'Pushed' and/or 'Held' actions")
             		}
                 	break
         	case 5:
-            		section("Hardware specific info:") {  
+            		section("Hardware specific info on button selection:") {  
            		paragraph ("-For WD100+ or WS100+ devices; this FIFTH Button action occurs with a press & hold on lower paddle. *Select 'Pushed' (not Held) actions.") 		
         		}
                 	break
         	case 6:
-            		section("Hardware specific info:") {  
+            		section("Hardware specific info on button selection:") {  
            		paragraph ("-For WD100+ or WS100+ devices; this SIXTH Button action occurs with a press & hold on lower paddle. *Select 'Pushed' (not Held) actions.") 		
         		}
                 	break
