@@ -14,6 +14,7 @@
   https://github.com/erocm123/SmartThingsPublic/tree/master/devicetypes/erocm123/homeseer-hs-wd100-dimmer-switch.src
       
   Change Log
+  2016-05-29 Minor text clean up and formatting
   2016-05-28 Minor text, typo changes to screens, paragraph separation for devices
   2016-05-27 Added Hardware specific button help paragraphs per button
   2016-05-26 Repo addition, new icon change. 
