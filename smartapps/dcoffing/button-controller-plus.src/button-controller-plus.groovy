@@ -14,7 +14,7 @@
   https://github.com/erocm123/SmartThingsPublic/tree/master/devicetypes/erocm123/homeseer-hs-wd100-dimmer-switch.src
       
   Change Log
-  2016-05-29 Minor text clean up and formatting
+  2016-05-29 Used helpButton1() technique 
   2016-05-28 Minor text, typo changes to screens, paragraph separation for devices
   2016-05-27 Added Hardware specific button help paragraphs per button
   2016-05-26 Repo addition, new icon change. 
@@ -118,39 +118,34 @@ def getButtonSections(buttonNumber) {
 	switch (buttonNumber) {
    	    	case 1:
   	         	section("Hardware specific info on button selection:") {  
-            		paragraph ("-For WD100+ or WS100+ devices; this FIRST Button action occurs with a double-tap on upper paddle. *Select 'Pushed' (not Held) .") +
-                    	paragraph ("-For Aeon Minimote device; the FIRST button is upper left when operating in hand.'Pushed' and/or 'Held' actions")
-        		}
-                	break
+            	paragraph "${helpButton1()}"
+                }
+                break
         	case 2:
-            		section("Hardware specific info on button selection:") {  
-           		paragraph ("-For WD100+ or WS100+ devices; this SECOND Button action occurs with a double-tap on lower paddle. *Select 'Pushed' (not Held) actions.")	
-        		paragraph ("-For Aeon Minimote device; the SECOND button is upper right when operating in hand.'Pushed' and/or 'Held' actions") 	
-            			
-            		}
-                	break
+            	section("Hardware specific info on button selection:") {  
+           		paragraph "${helpButton2()}"
+            	}
+                break
         	case 3:
-            		section("Hardware specific info on button selection:") {  
-           		paragraph ("-For WD100+ or WS100+ devices; this THIRD Button action occurs with a triple-tap on upper paddle. *Select 'Pushed' (not Held) actions.")
-           		paragraph ("-For Aeon Minimote device; the THIRD button is lower left when operating in hand.'Pushed' and/or 'Held' actions") 
-        		}
-                	break
+            	section("Hardware specific info on button selection:") {  
+           		paragraph "${helpButton3()}"
+                }
+                break
         	case 4:
-            		section("Hardware specific info on button selection:") {  
-           		paragraph ("-For WD100+ or WS100+ devices; this FOURTH Button action occurs with a triple-tap on lower paddle. *Select 'Pushed' (not Held) actions.") 		 		
-        		paragraph ("-For Aeon Minimote device; the FOURTH button is lower right when operating in hand.'Pushed' and/or 'Held' actions")
-            		}
-                	break
+            	section("Hardware specific info on button selection:") {  
+           		paragraph "${helpButton4()}"
+                }
+            	break
         	case 5:
-            		section("Hardware specific info on button selection:") {  
-           		paragraph ("-For WD100+ or WS100+ devices; this FIFTH Button action occurs with a press & hold on lower paddle. *Select 'Pushed' (not Held) actions.") 		
-        		}
-                	break
+            	section("Hardware specific info on button selection:") {  
+           		paragraph "${helpButton5()}"
+                }
+                break
         	case 6:
-            		section("Hardware specific info on button selection:") {  
-           		paragraph ("-For WD100+ or WS100+ devices; this SIXTH Button action occurs with a press & hold on lower paddle. *Select 'Pushed' (not Held) actions.") 		
+            	section("Hardware specific info on button selection:") {  
+           		paragraph "${helpButton6()}"
         		}
-                	break
+                break
         }        	
       
 		section("Lights to Toggle") {
@@ -582,13 +577,60 @@ private timeIntervalLabel() {
 
 private def helpButton1() {
     def text =
-" HS-WS100+ and HS-WD100+ Button Mappings " +
-"   Action		 Button#	Button Action    " +
-"---------------------------------------  " +
-"Double-Tap Up		1	   pressed        " +
-"Double-Tap Down	2	   pressed			" +
-"Triple-Tap Up		3	   pressed			" +
-"Triple-Tap Down	4	   pressed			" +
-"Hold Up		   	5	   pressed			" +
-"Hold Down	    	6	   pressed			" 
+"a) WD100+ or WS100+ devices; this FIRST Button action occurs" +
+" with a double-tap on upper paddle." +
+"\n"+
+" *Select 'Pushed' (not 'Held') options." +
+"\n\n"+
+"b) For Minimote device; the FIRST button is upper left" +
+" when operating in hand."+
+"\n"+
+"*Select 'Pushed' and/or 'Held' options." 
+}
+
+private def helpButton2() {
+    def text =
+"a) For WD100+ or WS100+ devices; this SECOND Button action occurs" +
+" with a double-tap on lower paddle." +
+"\n"+
+" *Select 'Pushed' (not 'Held') options." +
+"\n\n"+
+"b) For Minimote device; the SECOND button is upper right" +
+" when operating in hand.)"+
+"\n"+
+"*Select 'Pushed' and/or 'Held' options."  
+}
+private def helpButton3() {
+    def text =
+"a) For WD100+ or WS100+ devices; this THIRD Button action occurs" +
+" with a triple-tap on upper paddle." +
+"\n"+
+" *Select 'Pushed' (not 'Held') options." +
+"\n\n"+
+"b) For Minimote device; the THIRD button is lower left" +
+" when operating in hand.)"+
+"\n"+
+" *Select 'Pushed' and/or 'Held' options."
+}
+private def helpButton4() {
+    def text =
+"a) For WD100+ or WS100+ devices; this FOURTH Button action occurs" +
+" with a triple-tap on lower paddle." +
+" *Select 'Pushed' (not 'Held') options." +
+"\n\n"+
+"b) For Minimote device; the FOURTH button is lower right" +
+" when operating in hand." +
+" *Select 'Pushed' and/or 'Held' options." 
+}
+private def helpButton5() {
+    def text =
+"a) For WD100+ or WS100+ devices; this FIFTH Button action occurs" +
+" with a press & hold on upper paddle." + 
+" *Select 'Pushed' (not 'Held') options." 
+}
+private def helpButton6() {
+    def text =
+"a) For WD100+ or WS100+ devices; this SIXTH Button action occurs" +
+" with a press & hold on lower paddle." +
+" *Select 'Pushed' (not 'Held') options." 
 }
