@@ -577,12 +577,12 @@ private timeIntervalLabel() {
 
 private def helpButton1() {
     def text =
-"a) WD100+ or WS100+ devices; this FIRST Button action occurs" +
+"WD100+ or WS100+ devices; this FIRST Button action occurs" +
 " with a double-tap on upper paddle." +
 "\n"+
-" *Select 'Pushed' (not 'Held') options." +
+"*Select 'Pushed' (not 'Held') options." +
 "\n\n"+
-"b) For Minimote device; the FIRST button is upper left" +
+"Aeon Minimote; FIRST button is upper left" +
 " when operating in hand."+
 "\n"+
 "*Select 'Pushed' and/or 'Held' options." 
@@ -590,47 +590,51 @@ private def helpButton1() {
 
 private def helpButton2() {
     def text =
-"a) For WD100+ or WS100+ devices; this SECOND Button action occurs" +
+"WD100+ or WS100+ devices; this SECOND Button action occurs" +
 " with a double-tap on lower paddle." +
 "\n"+
 " *Select 'Pushed' (not 'Held') options." +
 "\n\n"+
-"b) For Minimote device; the SECOND button is upper right" +
+"Aeon Minimote; SECOND button is upper right" +
 " when operating in hand.)"+
 "\n"+
 "*Select 'Pushed' and/or 'Held' options."  
 }
 private def helpButton3() {
     def text =
-"a) For WD100+ or WS100+ devices; this THIRD Button action occurs" +
+"WD100+ or WS100+ devices; this THIRD Button action occurs" +
 " with a triple-tap on upper paddle." +
 "\n"+
 " *Select 'Pushed' (not 'Held') options." +
 "\n\n"+
-"b) For Minimote device; the THIRD button is lower left" +
+"Aeon Minimote; THIRD button is lower left" +
 " when operating in hand.)"+
 "\n"+
-" *Select 'Pushed' and/or 'Held' options."
+"*Select 'Pushed' and/or 'Held' options."
 }
 private def helpButton4() {
     def text =
-"a) For WD100+ or WS100+ devices; this FOURTH Button action occurs" +
+"WD100+ or WS100+ devices; this FOURTH Button action occurs" +
 " with a triple-tap on lower paddle." +
+"\n"+
 " *Select 'Pushed' (not 'Held') options." +
 "\n\n"+
-"b) For Minimote device; the FOURTH button is lower right" +
+"Aeon Minimote; FOURTH button is lower right" +
 " when operating in hand." +
-" *Select 'Pushed' and/or 'Held' options." 
+"\n"+
+"*Select 'Pushed' and/or 'Held' options." 
 }
 private def helpButton5() {
     def text =
-"a) For WD100+ or WS100+ devices; this FIFTH Button action occurs" +
+"WD100+ or WS100+ devices; this FIFTH Button action occurs" +
 " with a press & hold on upper paddle." + 
-" *Select 'Pushed' (not 'Held') options." 
+"\n"+
+"*Select 'Pushed' (not 'Held') options." 
 }
 private def helpButton6() {
     def text =
-"a) For WD100+ or WS100+ devices; this SIXTH Button action occurs" +
+"WD100+ or WS100+ devices; SIXTH Button action occurs" +
 " with a press & hold on lower paddle." +
-" *Select 'Pushed' (not 'Held') options." 
+"\n"+
+"*Select 'Pushed' (not 'Held') options." 
 }
