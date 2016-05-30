@@ -8,6 +8,7 @@
    such as the GE 12730 or Leviton VRF01-1LX
    
   Change Log
+  2016-5-30 added dynamicPages for instructions, icon at copyright
   2016-5-19 code clean up only
   2016-5-17 fanDiffTemp input changed to use enum with preselected values to overcome range:"0.1..5.0" bug
   2016-5-16 fixed typo with motion to motionSensor in hasBeenRecentMotion()
@@ -23,7 +24,7 @@
             replace icons to ceiling fan, modify name from Control to Thermostat
   2016-5-5b @krlaframboise change to bypasses the temperatureHandler method and calls the tempCheck method
             with the current temperature and setpoint setting
-  2016-5-5  autoMode added for manual override of auto control
+  2016-5-5  autoMode added for manual override of auto control/*
   2016-5-4b cleaned debug logs, removed heat-cool selection, removed multiple stages
   2016-5-3  fixed error on not shutting down, huge shout out to my bro Stephen Coffing in the logic formation 
   
@@ -31,7 +32,7 @@
   -(fixed) when SP is updated, temp control isn't evaluated immediately, an event must trigger like change in temp, motion
   - if load is previously running when smartapp is loaded, it isn't evaluated immediately to turn off when SP>CT
  
-  Thanks to @krlaframboise, @MikeMaxwell for help and knowledge in solving issues for a first time coder.
+  Thanks to @krlaframboise, @MikeMaxwell for help in solving issues for a first time coder. @MichaelS for icon background
  
    Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
    in compliance with the License. You may obtain a copy of the License at: www.apache.org/licenses/LICENSE-2.0
@@ -52,7 +53,14 @@ definition(
 )
 
 preferences {
-	section("Select a temperature sensor to control the fan..."){
+	page(name: "mainPage")
+    page(name: "aboutPage")
+}
+
+def mainPage() {
+  dynamicPage(name: "mainPage", title: "Select your devices and settings", uninstall: true) {
+   	
+    section("Select a temperature sensor to control the fan..."){
 		input "tempSensor", "capability.temperatureMeasurement",
         	multiple:false, title: "Temperature Sensor", required: true 
 	}
@@ -75,7 +83,33 @@ preferences {
 	section("Select ceiling fan operating mode desired (default to 'YES-Auto'..."){
 		input "autoMode", "enum", title: "Enable Ceiling Fan Thermostat?", options: ["NO-Manual","YES-Auto"], required: false
 	}
-	section ("3 Speed Ceiling Fan Thermostat;   Version:1.0.160519") { } //ver format 1.0.YYMMDD
+    section ("Advanced Options") {
+		label title: "Assign a name", required: false
+		mode title: "Set for specific mode(s)", required: false
+	}
+   
+
+	section("Version Info, Instructions") {
+// VERSION
+		paragraph "3 Speed Ceiling Fan Thermostat \n"+"Version:1.0.160530 \n"+"Copyright © 2016 Dale Coffing", image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-speed-ceiling-fan-thermostat.src/3scft125x125.png"
+
+       href (name: "aboutPage", 
+       title: none, 
+       description: "Tap to get application information and instructions.",
+       image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-speed-ceiling-fan-thermostat.src/info.png",
+       required: false,
+       page: "aboutPage"
+  	   )
+   }	
+ }
+}
+
+def aboutPage() {
+	dynamicPage(name: "aboutPage", title: none, install: true, uninstall: true) {
+     	section("Instructions") {
+        	paragraph textHelp()
+ 		}
+	}
 }
 
 def installed() {
@@ -146,9 +180,7 @@ private tempCheck(currentTemp, desiredTemp)
 	log.debug "TEMPCHECK#1(CT=$currentTemp,SP=$desiredTemp,FD=$fanDimmer.currentSwitch,FD_LVL=$fanDimmer.currentLevel, automode=$autoMode,FDTstring=$fanDiffTempString, FDTvalue=$fanDiffTempValue)"
     
     //convert Fan Diff Temp input enum string to number value and if user doesn't select a Fan Diff Temp default to 1.0 
-	//  log.debug "fanDiffTempValue BEFORE convert String (FDTstring=$fanDiffTempString, FDTvalue=$fanDiffTempValue)"
     def fanDiffTempValue = (settings.fanDiffTempString != null && settings.fanDiffTempString != "") ? Double.parseDouble(settings.fanDiffTempString): 1.0
-	//  log.debug "fanDiffTempValue AFTER convert String (FDTstring=$fanDiffTempString, FDTvalue=$fanDiffTempValue)"  
 	
     //if user doesn't select autoMode then default to "YES-Auto"
     def autoModeValue = (settings.autoMode != null && settings.autoMode != "") ? settings.autoMode : "YES-Auto"	
@@ -188,8 +220,8 @@ private tempCheck(currentTemp, desiredTemp)
             		log.debug "below SP+Diff=fan OFF (CT=$currentTemp, SP=$desiredTemp, FD-LVL=$fanDimmer.currentLevel, FD=$fanDimmer.currentSwitch,autoMode=$autoMode,)"
 				} 
                 log.debug "autoMode YES-MANUAL? else OFF(CT=$currentTemp, SP=$desiredTemp, FD-LVL=$fanDimmer.currentLevel, FD=$fanDimmer.currentSwitch,autoMode=$autoMode,)"
-        }	//end of switch statement
-	}	// end of IF (autoModeValue...
+        }	
+	}	
 }
 
 private hasBeenRecentMotion()
@@ -198,7 +230,6 @@ private hasBeenRecentMotion()
 	if (motionSensor && minutes) {
 		def deltaMinutes = minutes as Long
 		if (deltaMinutes) {
-     //    log.debug "HASBEENRECENTMOTION ($deltaMinutes, $motionEvents, $motion.eventsSince, $deltaMinutes)"
 			def motionEvents = motionSensor.eventsSince(new Date(now() - (60000 * deltaMinutes)))
 			log.trace "Found ${motionEvents?.size() ?: 0} events in the last $deltaMinutes minutes"
 			if (motionEvents.find { it.value == "active" }) {
@@ -211,3 +242,23 @@ private hasBeenRecentMotion()
 	}
 	isActive
 }
+
+private def textHelp() {
+	def text =
+		"This smartapp provides automatic control of Low, Medium, High speeds of a"+
+		" ceiling fan using any temperature sensor based on its' temperature setpoint"+
+        " turning on each speed automatically in 1 degree differential increments (adjustable)."+
+        " For example, if the desired room temperature setpoint is 72, the low speed"+
+        " turns on first at 73, the medium speed turns on at 74, the high speed turns"+
+        " on at 75. And vice versa on decreasing temperature until at 72 the ceiling"+
+        " fan turns off. \n\n" +
+        "A notable feature is when low speed is initially requested from"+
+        " the off condition, high speed is turned on briefly to overcome the startup load"+
+        " then low speed is engaged. This mimics the pull chain switches that most"+
+        " manufacturers use by always starting in high speed. \n\n"+
+      	"A motion option turns off automatic mode when no motion is detected. A thermostat"+
+        " mode option will disable the smartapp and pass control to manual control.\n\n"+
+        "@ChadCK's 'Z-Wave Smart Fan Control Custom Device Handler' along with hardware"+
+        " designed specifically for motor control such as the GE 12730 Z-Wave Smart Fan Control or"+
+        " Leviton VRF01-1LX works well together with this smartapp."
+	}
