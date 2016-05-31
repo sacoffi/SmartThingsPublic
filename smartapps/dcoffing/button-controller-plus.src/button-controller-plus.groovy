@@ -2,7 +2,7 @@
 	Button Controller Plus
   	Copyright 2016  Author: SmartThings, modified by Bruce Ravenel, Dale Coffing 
        
-   Control devices using the buttons of an Aeon Minimote, Key Fob, or HomeSeer WD100+ and WS100+
+   Control devices using the buttons of an Aeon Minimote, Key Fob, or HomeSeer HS-WD100+ and HS-WS100+
    multi-tap features so the double-tap, triple-tap, press & hold functionality can trigger 
    up to 6 home automation events. 
    
