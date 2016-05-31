@@ -8,9 +8,10 @@
    such as the GE 12730 or Leviton VRF01-1LX
    
   Change Log
-  2016-5-30 added dynamicPages for instructions, icon at copyright
+  2016-5-30 added dynamicPages for user guide, combined version data with aboutPage parameters which
+  			gives a larger icon image then if used alone in paragraph mode.
   2016-5-19 code clean up only
-  2016-5-17 fanDiffTemp input changed to use enum with preselected values to overcome range:"0.1..5.0" bug
+  2016-5-17 fanDiffTemp input changed to use enum with preselected values to overcome range:"0.1..2.0" bug
   2016-5-16 fixed typo with motion to motionSensor in hasBeenRecentMotion()
             fixed IDE integration with ST by making another change to file name specifics.
   2016-5-15 fixed fan differenial decimal point error by removing range: "1..99", removed all fanDimmer.setLevel(0)
@@ -58,7 +59,7 @@ preferences {
 }
 
 def mainPage() {
-  dynamicPage(name: "mainPage", title: "Select your devices and settings", uninstall: true) {
+  dynamicPage(name: "mainPage", title: "Select your devices and settings", install: true, uninstall: true){
    	
     section("Select a temperature sensor to control the fan..."){
 		input "tempSensor", "capability.temperatureMeasurement",
@@ -89,24 +90,22 @@ def mainPage() {
 	}
    
 
-	section("Version Info, Instructions") {
+	section("Version Info, User's Guide") {
 // VERSION
-		paragraph "3 Speed Ceiling Fan Thermostat \n"+"Version:1.0.160530 \n"+"Copyright © 2016 Dale Coffing", image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-speed-ceiling-fan-thermostat.src/3scft125x125.png"
-
        href (name: "aboutPage", 
-       title: none, 
-       description: "Tap to get application information and instructions.",
-       image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-speed-ceiling-fan-thermostat.src/info.png",
+       title: "3 Speed Ceiling Fan Thermostat \n"+"Version:1.0.160530 \n"+"Copyright © 2016 Dale Coffing", 
+       description: "Tap to get application information and user's guide.",
+       image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-speed-ceiling-fan-thermostat.src/3scft125x125.png",
        required: false,
        page: "aboutPage"
-  	   )
+ 	   )
    }	
  }
 }
 
 def aboutPage() {
 	dynamicPage(name: "aboutPage", title: none, install: true, uninstall: true) {
-     	section("Instructions") {
+     	section("User's Guide; 3 Speed Ceiling Fan Thermostat") {
         	paragraph textHelp()
  		}
 	}
@@ -247,11 +246,11 @@ private def textHelp() {
 	def text =
 		"This smartapp provides automatic control of Low, Medium, High speeds of a"+
 		" ceiling fan using any temperature sensor based on its' temperature setpoint"+
-        " turning on each speed automatically in 1 degree differential increments (adjustable)."+
+        " turning on each speed automatically in 1 degree differential increments."+
         " For example, if the desired room temperature setpoint is 72, the low speed"+
         " turns on first at 73, the medium speed turns on at 74, the high speed turns"+
         " on at 75. And vice versa on decreasing temperature until at 72 the ceiling"+
-        " fan turns off. \n\n" +
+        " fan turns off. The differential is adjustable from 0.5 to 2.0 in half degree increments. \n\n" +
         "A notable feature is when low speed is initially requested from"+
         " the off condition, high speed is turned on briefly to overcome the startup load"+
         " then low speed is engaged. This mimics the pull chain switches that most"+
