@@ -660,13 +660,13 @@ private def helpButton6() {
 
 private def textHelp() {
 	def text =
-		"This smartapp allow you to use a device with buttons like the Aeon Labs Minimote,"+
+		"This smartapp allows you to use a device with buttons like the Aeon Labs Minimote,"+
         " Key Fob, HomeSeer HS-WD100+ or HS-WS100+ switches that have the added abilities of"+
         " double-tap, triple-tap and press & hold features to the paddle switch to do home"+
-        " automation control. This smartapp modified @bravenel"+
+        " automation control. This smartapp modified @bravenel's"+
         " Button Controller+ which had previously fixed all the shortcomings of the stock Button Controller"+
-        " smartapp. The original app had four buttons to match the Aeon Minimote but these new"+
-        " Homeseer switches needed six button controls to handle the additional features of scene control. \n\n"+
+        " smartapp. The original app had four buttons but the new"+
+        " Homeseer switches needed six button controls to handle the additional features. \n\n"+
         "The control options available are: \n"+
         "	Lights to Toggle \n"+
         "	Dimmers to Toggle \n"+
