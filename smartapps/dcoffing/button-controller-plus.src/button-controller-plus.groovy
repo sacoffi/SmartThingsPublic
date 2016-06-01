@@ -240,7 +240,7 @@ def getButtonSections(buttonNumber) {
 			input "notifications_${buttonNumber}_held", "bool", title: "Held", required: false, defaultValue: false
 		}
 
-		section("Sms Notifications") {
+		section("SMS Notifications") {
 			input "phone_${buttonNumber}_pushed","phone" ,title: "Pushed", required: false
 			input "phone_${buttonNumber}_held", "phone", title: "Held", required: false
 		}
@@ -666,9 +666,23 @@ private def textHelp() {
         " automation control. This smartapp modified @bravenel"+
         " Button Controller+ which had previously fixed all the shortcomings of the stock Button Controller"+
         " smartapp. The original app had four buttons to match the Aeon Minimote but these new"+
-        " Homeseer switches needed six button controls to handle the additional features of scene control. \n"+
-        " The control options available per button are = Lights to Toggle; Dimmers to Toggle; Lights to Turn On;"+
-        " Lights to Turn Off; Dimmers to DimLevel 1; Fan to Adjust - Low, Medium, High, Off;"+
-        " Shade to Adjust - Up,Down, or Stop; Speaker music player; Hello Home Actions; Push Notifications;"+
-        " SMS Notifications; and Associate a Momentary Button."
+        " Homeseer switches needed six button controls to handle the additional features of scene control. \n\n"+
+        "The control options available are: \n"+
+        "	Lights to Toggle \n"+
+        "	Dimmers to Toggle \n"+
+        "	Lights to Turn On \n"+
+        "	Lights to Turn Off \n"+
+        "	Dimmers to DimLevel 1 \n"+
+        "	Dimmers to DimLevel 2 \n"+
+        "	Fan to Adjust - Low, Medium, High, Off \n"+
+        "	Shade to Adjust - Up, Down, or Stop \n"+
+        "	Locks \n"+
+        "	Speaker music player \n"+
+        "	Modes \n"+
+        "	Hello Home Actions \n"+
+        "	Sirens \n"+
+        "	Custom Message \n"+
+        "	Push Notifications \n"+
+        "	SMS Notifications \n"+
+        "	Associate a Momentary Button"
 	}
