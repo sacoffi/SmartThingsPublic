@@ -14,6 +14,7 @@
   https://github.com/erocm123/SmartThingsPublic/tree/master/devicetypes/erocm123/homeseer-hs-wd100-dimmer-switch.src
       
   Change Log
+  2016-05-31 User's Guide page and Icon w/ cyan color
   2016-05-29 Used helpButton1() technique 
   2016-05-28 Minor text, typo changes to screens, paragraph separation for devices
   2016-05-27 Added Hardware specific button help paragraphs per button
@@ -39,9 +40,9 @@ definition(
     author: "Bruce Ravenel, Dale Coffing",
     description: "Control devices with buttons using Aeon Labs Minimote, HomeSeer HS-WD100+, HS-WS100+, Key Fob, etc.",
     category: "My Apps",
-    iconUrl: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/button-controller-plus.src/MultiTapIcon125x125.png",
-    iconX2Url: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/button-controller-plus.src/MultiTapIcon250x250.png",
-    iconX3Url: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/button-controller-plus.src/MultiTapIcon250x250.png"
+    iconUrl: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/button-controller-plus.src/MultiTapIcon125x125cy.png",
+    iconX2Url: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/button-controller-plus.src/MultiTapIcon250x250cy.png",
+    iconX3Url: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/button-controller-plus.src/MultiTapIcon250x250cy.png"
 )
 
 preferences {
@@ -52,6 +53,7 @@ preferences {
 	page(name: "configureButton4")
 	page(name: "configureButton5")
 	page(name: "configureButton6")
+    page(name: "aboutPage")
     
 	page(name: "timeIntervalInput", title: "Only during a certain time") {
 		section {
@@ -82,11 +84,28 @@ def selectButton() {
         section() {
         	label title: "Assign a name:", required: false
         }
-//VERSION 
-        section ("Button Controller Plus Version:1.0.160529") {} //version format 1.0.YYMMDD
-	}
+ 
+    	section("Version Info, User's Guide") {
+// VERSION
+       	href (name: "aboutPage", 
+       	title: "Button Controller Plus \n"+"Version 1.0.160531", 
+       	description: "Tap to get application information and user's guide.",
+       	image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/button-controller-plus.src/MultiTapIcon125x125cy.png",
+       	required: false,
+       	page: "aboutPage"
+ 	   )
+   }	
+            
+            }
 }
 
+def aboutPage() {
+	dynamicPage(name: "aboutPage", title: none, install: true, uninstall: true) {
+     	section("User's Guide; Button Controller Plus") {
+        	paragraph textHelp()
+ 		}
+	}
+}
 def configureButton1() {
 	dynamicPage(name: "configureButton1", title: "Now let's decide how to use the FIRST button... ",
 		nextPage: "configureButton2", uninstall: configured(), getButtonSections(1))          
@@ -638,3 +657,18 @@ private def helpButton6() {
 "\n"+
 "*Select 'Pushed' (not 'Held') options." 
 }
+
+private def textHelp() {
+	def text =
+		"This smartapp allow you to use a device with buttons like the Aeon Labs Minimote,"+
+        " Key Fob, HomeSeer HS-WD100+ or HS-WS100+ switches that have the added abilities of"+
+        " double-tap, triple-tap and press & hold features to the paddle switch to do home"+
+        " automation control. This smartapp modified @bravenel"+
+        " Button Controller+ which had previously fixed all the shortcomings of the stock Button Controller"+
+        " smartapp. The original app had four buttons to match the Aeon Minimote but these new"+
+        " Homeseer switches needed six button controls to handle the additional features of scene control. \n"+
+        " The control options available per button are = Lights to Toggle; Dimmers to Toggle; Lights to Turn On;"+
+        " Lights to Turn Off; Dimmers to DimLevel 1; Fan to Adjust - Low, Medium, High, Off;"+
+        " Shade to Adjust - Up,Down, or Stop; Speaker music player; Hello Home Actions; Push Notifications;"+
+        " SMS Notifications; and Associate a Momentary Button."
+	}
