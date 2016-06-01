@@ -89,7 +89,7 @@ def selectButton() {
 // VERSION
        	href (name: "aboutPage", 
        	title: "Button Controller Plus \n"+"Version 1.0.160531", 
-       	description: "Tap to get application information and user's guide.",
+       	description: "Tap to get smartapp information and user's guide.",
        	image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/button-controller-plus.src/MultiTapIcon125x125cy.png",
        	required: false,
        	page: "aboutPage"
