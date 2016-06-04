@@ -205,7 +205,7 @@ private tempCheck(currentTemp, desiredTemp)
             	// turn on fan low speed
             	if (fanDimmer.currentSwitch == "off") {		// if fan is OFF to make it easier on motor by   
             		fanDimmer.setLevel(90)					// starting fan in High speed temporarily then 
-                	fanDimmer.setLevel(30, [delay: 3000])	// change to Low speed after 3 seconds
+                	fanDimmer.setLevel(30, [delay: 1000])	// change to Low speed after 1 second
                 	log.debug "LO speed after HI 3secs(CT=$currentTemp, SP=$desiredTemp, FD-LVL=$fanDimmer.currentLevel, LowDiff=$LowDiff)"
           		} else {
                 	fanDimmer.setLevel(30)	//fan is already running, not necessary to protect motor
