@@ -8,6 +8,7 @@
    such as the GE 12730 or Leviton VRF01-1LX
    
   Change Log
+  2016-06-03 modified the 3 second startup to 1 for low speed
   2016-5-30 added dynamicPages for user guide, combined version data with aboutPage parameters which
   			gives a larger icon image then if used alone in paragraph mode.
   2016-5-19 code clean up only
@@ -93,7 +94,7 @@ def mainPage() {
 	section("Version Info, User's Guide") {
 // VERSION
        href (name: "aboutPage", 
-       title: "3 Speed Ceiling Fan Thermostat \n"+"Version:1.0.160530 \n"+"Copyright © 2016 Dale Coffing", 
+       title: "3 Speed Ceiling Fan Thermostat \n"+"Version:1.0.160603 \n"+"Copyright © 2016 Dale Coffing", 
        description: "Tap to get application information and user's guide.",
        image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-speed-ceiling-fan-thermostat.src/3scft125x125.png",
        required: false,
