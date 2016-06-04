@@ -61,7 +61,7 @@ preferences {
 def mainPage() {
   dynamicPage(name: "mainPage", title: "Select your devices and settings", install: true, uninstall: true){
    	
-    section("Select a temperature sensor to control the fan..."){
+    	section("Select a temperature sensor to control the fan..."){
 		input "tempSensor", "capability.temperatureMeasurement",
         	multiple:false, title: "Temperature Sensor", required: true 
 	}
@@ -84,7 +84,7 @@ def mainPage() {
 	section("Select ceiling fan operating mode desired (default to 'YES-Auto'..."){
 		input "autoMode", "enum", title: "Enable Ceiling Fan Thermostat?", options: ["NO-Manual","YES-Auto"], required: false
 	}
-    section ("Advanced Options") {
+    	section ("Advanced Options") {
 		label title: "Assign a name", required: false
 		mode title: "Set for specific mode(s)", required: false
 	}
@@ -99,8 +99,8 @@ def mainPage() {
        required: false,
        page: "aboutPage"
  	   )
-   }	
- }
+   	}	
+    }
 }
 
 def aboutPage() {
@@ -195,8 +195,8 @@ private tempCheck(currentTemp, desiredTemp)
         		// turn on fan high speed
        			fanDimmer.setLevel(90) 
             	log.debug "HI speed(CT=$currentTemp, SP=$desiredTemp, FD-LVL=$fanDimmer.currentLevel, HighDiff=$HighDiff)"
-	            break  //exit switch statement 
-			case { it >= MedDiff }:
+	        break  //exit switch statement 
+		case { it >= MedDiff }:
             	// turn on fan medium speed
             	fanDimmer.setLevel(60)
             	log.debug "MED speed(CT=$currentTemp, SP=$desiredTemp, FD-LVL=$fanDimmer.currentLevel, MedDiff=$MedDiff)"
