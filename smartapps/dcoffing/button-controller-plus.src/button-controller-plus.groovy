@@ -646,14 +646,14 @@ private def helpButton4() {
 }
 private def helpButton5() {
     def text =
-"(See user guide on quirk for WD100+) or WS100+ devices; this FIFTH Button action occurs" +
+"(See user guide on quirk for WD100+) For WS100+ devices; this FIFTH Button action occurs" +
 " with a press & hold on upper paddle." + 
 "\n"+
 "*Select 'Pushed' (not 'Held') options." 
 }
 private def helpButton6() {
     def text =
-"(See user guide on quirk for WD100+) or WS100+ devices; SIXTH Button action occurs" +
+"(See user guide on quirk for WD100+) For WS100+ devices; SIXTH Button action occurs" +
 " with a press & hold on lower paddle." +
 "\n"+
 "*Select 'Pushed' (not 'Held') options." 
@@ -685,13 +685,13 @@ private def textHelp() {
         "	Custom Message \n"+
         "	Push Notifications \n"+
         "	SMS Notifications \n"+
-        "	Associate a Momentary Button \n\n"
-        "****** Quirk for HS-WD100+ on 5/6 buttons \n"+
+        "	Associate a Momentary Button \n\n"+
+        "** Quirk for HS-WD100+ on 5/6 buttons **\n"+
         "Because a dimmer switch already uses press&hold to manually set the dimming level"+
         " please be aware of this operational behavior. If you only want to manually change"+
         " the dim level to the lights that are wired to the switch you will automatically"+
         " trigger the 5/6 button event as well. And the same is true in reverse, if you"+ 
         " only want to trigger a 5/6 button event action with press&hold you will manually"+
-        " be changing the dim level of the switch simultaneously as well."
-        "
+        " be changing the dim level of the switch simultaneously as well.\n"+
+        "This quirk doesn't exist of course with the HS-HS100+ since it is not a dimmer."
 	}
