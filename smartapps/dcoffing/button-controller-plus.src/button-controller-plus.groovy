@@ -14,6 +14,7 @@
   https://github.com/erocm123/SmartThingsPublic/tree/master/devicetypes/erocm123/homeseer-hs-wd100-dimmer-switch.src
       
   Change Log
+  2016-06-09 Added quirk issue to User's guide
   2016-05-31 User's Guide page and Icon w/ cyan color
   2016-05-29 Used helpButton1() technique 
   2016-05-28 Minor text, typo changes to screens, paragraph separation for devices
@@ -88,7 +89,7 @@ def selectButton() {
     	section("Version Info, User's Guide") {
 // VERSION
        	href (name: "aboutPage", 
-       	title: "Button Controller Plus \n"+"Version 1.0.160531", 
+       	title: "Button Controller Plus \n"+"Version 1.0.160609", 
        	description: "Tap to get smartapp information and user's guide.",
        	image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/button-controller-plus.src/MultiTapIcon125x125cy.png",
        	required: false,
@@ -645,14 +646,14 @@ private def helpButton4() {
 }
 private def helpButton5() {
     def text =
-"WD100+ or WS100+ devices; this FIFTH Button action occurs" +
+"(See user guide on quirk for WD100+) or WS100+ devices; this FIFTH Button action occurs" +
 " with a press & hold on upper paddle." + 
 "\n"+
 "*Select 'Pushed' (not 'Held') options." 
 }
 private def helpButton6() {
     def text =
-"WD100+ or WS100+ devices; SIXTH Button action occurs" +
+"(See user guide on quirk for WD100+) or WS100+ devices; SIXTH Button action occurs" +
 " with a press & hold on lower paddle." +
 "\n"+
 "*Select 'Pushed' (not 'Held') options." 
@@ -684,5 +685,13 @@ private def textHelp() {
         "	Custom Message \n"+
         "	Push Notifications \n"+
         "	SMS Notifications \n"+
-        "	Associate a Momentary Button"
+        "	Associate a Momentary Button \n\n"
+        "****** Quirk for HS-WD100+ on 5/6 buttons \n"+
+        "Because a dimmer switch already uses press&hold to manually set the dimming level"+
+        " please be aware of this operational behavior. If you only want to manually change"+
+        " the dim level to the lights that are wired to the switch you will automatically"+
+        " trigger the 5/6 button event as well. And the same is true in reverse, if you"+ 
+        " only want to trigger a 5/6 button event action with press&hold you will manually"+
+        " be changing the dim level of the switch simultaneously as well."
+        "
 	}
