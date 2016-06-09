@@ -124,11 +124,11 @@ def configureButton4() {
 		nextPage: "configureButton5", uninstall: configured(), getButtonSections(4))
 }
 def configureButton5() {
-	dynamicPage(name: "configureButton5", title: "If you have a FIFTH button (WD100+), set it up here or 'Next'",
+	dynamicPage(name: "configureButton5", title: "If you have a FIFTH button (WD,WS100+), set it up here or 'Next'",
 		nextPage: "configureButton6", uninstall: configured(), getButtonSections(5))
 }
 def configureButton6() {
-	dynamicPage(name: "configureButton6", title: "If you have a SIXTH button (WD100+), set it up here or 'Done'",
+	dynamicPage(name: "configureButton6", title: "If you have a SIXTH button (WD,WS100+), set it up here or 'Done'",
 		install: true, uninstall: true, getButtonSections(6))
 }
 
