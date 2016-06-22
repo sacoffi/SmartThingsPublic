@@ -13,6 +13,7 @@
     
   Change Log
   2016-06-22 added icons
+  	     -moved pump input to first required, made other selections not required
   2016-06-21 modify 3-speed-ceiling-fan-thermostat code for outlets
 
   
@@ -50,19 +51,20 @@ def mainPage() {
 		input "tempSensor", "capability.temperatureMeasurement",
         	multiple:false, title: "Temperature Sensor", required: true 
 	}
-	section("Select the Evap Cooler fan motor switch (on-off control) hardware..."){
-		input "fanMotor", "capability.switch", 
-	    	multiple:false, title: "Fan Motor On-Off Control device", required: true
-	}
-	section("Select the Evap Cooler fan speed switch (Hi-Lo control) hardware..."){
-		input "fanHiSpeed", "capability.switch", 
-	    	multiple:false, title: "Fan Hi-Lo Speed Control device", required: true
-	}
 	section("Select the Evap Cooler pump switch (on-off control) hardware..."){
 		input "fanPump", "capability.switch", 
 	    	multiple:false, title: "Fan Pump On-Off Control device", required: true
 	}
-		section("Enter the desired room temperature (ie 72.5)..."){
+	section("Select the Evap Cooler fan motor switch (on-off control) hardware..."){
+		input "fanMotor", "capability.switch", 
+	    	multiple:false, title: "Fan Motor On-Off Control device", required: false
+	}
+	section("Select the Evap Cooler fan speed switch (Hi-Lo control) hardware..."){
+		input "fanHiSpeed", "capability.switch", 
+	    	multiple:false, title: "Fan Hi-Lo Speed Control device", required: false
+	}
+
+	section("Enter the desired room temperature (ie 72.5)..."){
 		input "setpoint", "decimal", title: "Room Setpoint Temp", required: true
 	}
 	section("Enter the desired differential temp between fan speeds (default=1.0)..."){
@@ -86,7 +88,7 @@ def mainPage() {
 	section("Version Info, User's Guide") {
 // VERSION
        href (name: "aboutPage", 
-       title: "Evap Cooler Thermostat \n"+"Version: 1.0.160622 \n"+"Copyright © 2016 Dale Coffing", 
+       title: "Evap Cooler Thermostat \n"+"Version: 1.0.160622b \n"+"Copyright © 2016 Dale Coffing", 
        description: "Tap to get application information and user's guide.",
        image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/evap-cooler-thermostat.src/ect250x250.png",
        required: false,
