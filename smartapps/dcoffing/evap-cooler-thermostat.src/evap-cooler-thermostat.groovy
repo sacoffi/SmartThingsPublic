@@ -15,7 +15,8 @@
    or Monoprice #11989 Z-Wave In-Wall On/Off module
     
   Change Log
-  2016-06-22c modified icon to fan style
+  2016-06-22d change user guide content
+  2016-06-22c modified icon to fan style, breeze style for comparison
   2016-06-22b moved pump input to first position (required), made other selections not required	for those with single speed motor
   2016-06-22 added icons
   2016-06-21 modify 3-speed-ceiling-fan-thermostat code for outlets
@@ -92,7 +93,7 @@ def mainPage() {
 	section("Version Info, User's Guide") {
 // VERSION
        href (name: "aboutPage", 
-       title: "Evap Cooler Thermostat \n"+"Version: 1.0.160622c \n"+"Copyright © 2016 Dale Coffing", 
+       title: "Evap Cooler Thermostat \n"+"Version: 1.0.160622d \n"+"Copyright © 2016 Dale Coffing", 
        description: "Tap to get application information and user's guide.",
        image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/evap-cooler-thermostat.src/ect250x250.png",
        required: false,
