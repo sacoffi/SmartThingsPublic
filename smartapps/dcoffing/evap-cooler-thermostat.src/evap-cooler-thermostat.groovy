@@ -10,9 +10,9 @@
    It requires three hardware devices; any temperature sensor, a switch for Fan On-Off, a switch
    for pump. I suggest a Remotec ZFM-80 15amp relay, Enerwave ZWN-RSM2 10amp relays, Omoron LY1F SPDT 15amp relay
    
-   
-     
+    
   Change Log
+  2016-06-22 added icons
   2016-06-21 modify 3-speed-ceiling-fan-thermostat code for outlets
 
   
@@ -31,11 +31,11 @@ definition(
     name: "Evap Cooler Thermostat",
     namespace: "dcoffing",
     author: "Dale Coffing",
-    description: "Automatic control for Evaporative Cooler using 2-speed motor and water pump.",
+    description: "Automatic control for an Evaporative Cooler with a 2-speed motor, water pump and any temp sensor.",
     category: "My Apps",
-	iconUrl: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-speed-ceiling-fan-thermostat.src/3scft125x125.png", 
-   	iconX2Url: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-speed-ceiling-fan-thermostat.src/3scft250x250.png",
-	iconX3Url: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-speed-ceiling-fan-thermostat.src/3scft250x250.png",
+	iconUrl: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/evap-cooler-thermostat.src/ect125x125.png", 
+   	iconX2Url: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/evap-cooler-thermostat.src/ect250x250.png",
+	iconX3Url: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/evap-cooler-thermostat.src/ect250x250.png",
 )
 
 preferences {
@@ -86,9 +86,9 @@ def mainPage() {
 	section("Version Info, User's Guide") {
 // VERSION
        href (name: "aboutPage", 
-       title: "Evap Cooler Thermostat \n"+"Version:1.0.160603 \n"+"Copyright © 2016 Dale Coffing", 
+       title: "Evap Cooler Thermostat \n"+"Version: 1.0.160622 \n"+"Copyright © 2016 Dale Coffing", 
        description: "Tap to get application information and user's guide.",
-       image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-speed-ceiling-fan-thermostat.src/3scft125x125.png",
+       image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/evap-cooler-thermostat.src/ect250x250.png",
        required: false,
        page: "aboutPage"
  	   )
