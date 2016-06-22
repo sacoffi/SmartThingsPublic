@@ -245,11 +245,15 @@ private hasBeenRecentMotion()
 
 private def textHelp() {
 	def text =
-		" This smartapp provides automatic control for Evaporative Coolers with High/Low speeds using"+
-    " any temperature sensor. On a call for cooling the water pump is turned on and given two minutes"+
-    " to wet pads before fan low speed is enabled. The fan high speed is turned on if the temperature"+
-    " continues to rise above the adjustable differential. There is an optional motion override.\n\n"+
-    "It requires three hardware devices; any temperature sensor, a switch for Fan On-Off, a switch"+
-    " for pump. I suggest a Remotec ZFM-80 15amp relay, Enerwave ZWN-RSM2 10amp relays, Omoron LY1F"+
-    " SPDT 15amp relay."
+    "This smartapp provides automatic control for Evaporative Coolers (single or two-speed) using"+
+   " any temperature sensor. On a call for cooling the water pump is turned on and given two minutes"+
+   " to wet pads before fan low speed is enabled. The fan high speed is turned on if the temperature"+ 
+   " continues to rise above the adjustable differential. There is an optional motion override.\n\n"+
+   
+   "It requires these hardware devices; any temperature sensor, a switch for Fan On-Off, a switch"+
+   " for pump. For two speed control is desired another switch will be necessary.\n\n"+
+   " You might consider using a Remotec ZFM-80 15amp relay for fan motor on-off, if you desired both"+
+   " pump and fan speed then Enerwave ZWN-RSM2 dual 10amp relays to control pump and the second relay"+
+   " to control hi-lo speed via Omoron LY1F SPDT 15amp relay. For only pump control any switch could"+
+   " work like the Enerwave ZWN-RSM1S or Monoprice #11989 Z-Wave In-Wall On/Off module"
 	}
