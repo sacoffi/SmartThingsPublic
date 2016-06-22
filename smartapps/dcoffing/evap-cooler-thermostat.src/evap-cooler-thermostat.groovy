@@ -1,15 +1,18 @@
 /*
-   Virtual Thermostat for Evaporative Coolers Hi-Lo Speed
+   Virtual Thermostat for Evaporative Coolers 
    Copyright 2016 Dale Coffing
    
-   This smartapp provides automatic control for Evaporative Coolers with High/Low speeds using 
+   This smartapp provides automatic control for Evaporative Coolers (single or two-speed) using 
    any temperature sensor. On a call for cooling the water pump is turned on and given two minutes
    to wet pads before fan low speed is enabled. The fan high speed is turned on if the temperature 
    continues to rise above the adjustable differential. There is an optional motion override.
    
-   It requires three hardware devices; any temperature sensor, a switch for Fan On-Off, a switch
-   for pump. I suggest a Remotec ZFM-80 15amp relay, Enerwave ZWN-RSM2 10amp relays, Omoron LY1F SPDT 15amp relay
-   
+   It requires these hardware devices; any temperature sensor, a switch for Fan On-Off, a switch
+   for pump. For two speed control is desired another switch will be necessary.
+   I suggest a Remotec ZFM-80 15amp relay for fan motor on-off, if you desired both pump and fan speed
+   then Enerwave ZWN-RSM2 dual 10amp relays to control pump and the second relay to control hi-lo speed
+   via Omoron LY1F SPDT 15amp relay. For only pump control any switch could work like the Enerwave ZWN-RSM1S
+   or Monoprice #11989 Z-Wave In-Wall On/Off module
     
   Change Log
   2016-06-22c modified icon to fan style
