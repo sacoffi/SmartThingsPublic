@@ -89,7 +89,7 @@ def mainPage() {
 	section("Version Info, User's Guide") {
 // VERSION
        href (name: "aboutPage", 
-       title: "Evap Cooler Thermostat \n"+"Version: 1.0.160622b \n"+"Copyright © 2016 Dale Coffing", 
+       title: "Evap Cooler Thermostat \n"+"Version: 1.0.160622c \n"+"Copyright © 2016 Dale Coffing", 
        description: "Tap to get application information and user's guide.",
        image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/evap-cooler-thermostat.src/ect250x250.png",
        required: false,
