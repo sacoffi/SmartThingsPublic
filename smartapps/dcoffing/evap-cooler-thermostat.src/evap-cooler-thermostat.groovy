@@ -12,6 +12,7 @@
    
     
   Change Log
+  2016-06-22c modified icon to fan style
   2016-06-22b moved pump input to first position (required), made other selections not required	for those with single speed motor
   2016-06-22 added icons
   2016-06-21 modify 3-speed-ceiling-fan-thermostat code for outlets
