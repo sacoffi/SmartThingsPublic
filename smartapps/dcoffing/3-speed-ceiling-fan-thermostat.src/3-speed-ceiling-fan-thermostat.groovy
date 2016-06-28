@@ -8,6 +8,12 @@
    such as the GE 12730 or Leviton VRF01-1LX
    
   Change Log
+  2016-06-28 added submitOnChange for motion so to skip minutes input next if no motion selected
+ 			changed order of inputs for better logic flow
+            added separate input page for Configuring Settings to reduce clutter on required inputs
+            change to other mode techinque to see if it will force a reevaluate of methods
+            renamed fanHiSpeed to fanSpeed for more generic use, added 0.0 on timer selection
+            changed motion detector minutes input only if motion selected submitOnChange
   2016-06-03 modified the 3 second startup to 1 for low speed
   2016-5-30 added dynamicPages for user guide, combined version data with aboutPage parameters which
   			gives a larger icon image then if used alone in paragraph mode.
@@ -56,51 +62,69 @@ definition(
 
 preferences {
 	page(name: "mainPage")
+    page(name: "optionsPage")
     page(name: "aboutPage")
 }
 
 def mainPage() {
-  dynamicPage(name: "mainPage", title: "Select your devices and settings", install: true, uninstall: true){
+	dynamicPage(name: "mainPage", title: "Select your devices and settings", install: true, uninstall: true) {
    	
-    	section("Select a temperature sensor to control the fan..."){
-		input "tempSensor", "capability.temperatureMeasurement",
+    	section("Select a temperature sensor to control the fan...") {
+			input "tempSensor", "capability.temperatureMeasurement",
         	multiple:false, title: "Temperature Sensor", required: true 
-	}
-	section("Select the ceiling fan control hardware..."){
-		input "fanDimmer", "capability.switchLevel", 
+		}
+        section("Enter the desired room temperature (ie 72.5)...") {
+			input "setpoint", "decimal", title: "Room Setpoint Temp", required: true
+		}
+        section("Select the ceiling fan control hardware..."){
+			input "fanDimmer", "capability.switchLevel", 
 	    	multiple:false, title: "Fan Control device", required: true
+		}
+        section("Optional Settings (Diff Temp, Timers, Motion, etc)") {
+			href (name: "optionsPage", 
+        	title: "Configure Optional settings", 
+        	description: none,
+        	image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/evap-cooler-thermostat.src/settings250x250.png",
+        	required: false,
+        	page: "optionsPage"
+        	)
+        }
+        section("Version Info, User's Guide") {
+// VERSION
+			href (name: "aboutPage", 
+			title: "3 Speed Ceiling Fan Thermostat \n"+"Version:1.0.160628 \n"+"Copyright © 2016 Dale Coffing", 
+			description: "Tap to get user's guide.",
+			image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-speed-ceiling-fan-thermostat.src/3scft125x125.png",
+			required: false,
+			page: "aboutPage"
+			)
+		}
 	}
-	section("Enter the desired room temperature (ie 72.5)..."){
-		input "setpoint", "decimal", title: "Room Setpoint Temp", required: true
-	}
-	section("Enter the desired differential temp between fan speeds (default=1.0)..."){
-		input "fanDiffTempString", "enum", title: "Fan Differential Temp", options: ["0.5","1.0","1.5","2.0"], required: false
-	}
-	section("Enable ceiling fan thermostat only if motion is detected at (optional, leave blank to not require motion)..."){
-		input "motionSensor", "capability.motionSensor", title: "Select Motion device", required: false
-	}
-	section("Turn off ceiling fan when there's been no movement for..."){
-		input "minutes", "number", title: "Minutes?", required: false
-	}
-	section("Select ceiling fan operating mode desired (default to 'YES-Auto'..."){
-		input "autoMode", "enum", title: "Enable Ceiling Fan Thermostat?", options: ["NO-Manual","YES-Auto"], required: false
-	}
-    	section ("Advanced Options") {
+}      
+
+def optionsPage() {
+	dynamicPage(name: "optionsPage", title: "Configure Optional Settings", install: false, uninstall: false) {
+       	section("Enter the desired differential temp between fan speeds (default=1.0)..."){
+			input "fanDiffTempString", "enum", title: "Fan Differential Temp", options: ["0.5","1.0","1.5","2.0"], required: false
+		}
+		section("Enable ceiling fan thermostat only if motion is detected at (optional, leave blank to not require motion)..."){
+			input "motionSensor", "capability.motionSensor", title: "Select Motion device", required: false, submitOnChange: true
+		}
+        if (motionSensor) {
+			section("Turn off ceiling fan thermostat when there's been no motion detected for..."){
+				input "minutesNoMotion", "number", title: "Minutes?", required: true
+			}
+		}
+        section("Select ceiling fan operating mode desired (default to 'YES-Auto'..."){
+			input "autoMode", "enum", title: "Enable Ceiling Fan Thermostat?", options: ["NO-Manual","YES-Auto"], required: false
+		}
+    	section ("Change SmartApp name, Mode selector") {
 		label title: "Assign a name", required: false
 		mode title: "Set for specific mode(s)", required: false
-	}
+		}
    
 
-	section("Version Info, User's Guide") {
-// VERSION
-       href (name: "aboutPage", 
-       title: "3 Speed Ceiling Fan Thermostat \n"+"Version:1.0.160603 \n"+"Copyright © 2016 Dale Coffing", 
-       description: "Tap to get application information and user's guide.",
-       image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-speed-ceiling-fan-thermostat.src/3scft125x125.png",
-       required: false,
-       page: "aboutPage"
- 	   )
-   	}	
+	
     }
 }
 

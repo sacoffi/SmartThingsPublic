@@ -17,7 +17,7 @@
   Change Log
   2016-06-28 added submitOnChange for motion so to skip minutes input next if no motion selected
  			changed order of inputs for better logic flow
-            added separate input page for only advanced options
+            added separate input page for Configuring Settings to reduce clutter on required inputs
             change to other mode techinque to see if it will force a reevaluate of methods
             renamed fanHiSpeed to fanSpeed for more generic use, added 0.0 on timer selection
             changed motion detector minutes input only if motion selected submitOnChange
@@ -59,7 +59,7 @@ preferences {
 }
 
 def mainPage() {
-	dynamicPage(name: "mainPage", title: "Select your devices and settings", install: true, uninstall: true){
+	dynamicPage(name: "mainPage", title: "Select your devices and settings", install: true, uninstall: true) {
    	
     	section("Select a room temperature sensor to control the Evap Cooler..."){
 			input "tempSensor", "capability.temperatureMeasurement",
@@ -72,7 +72,7 @@ def mainPage() {
 			input "fanMotor", "capability.switch", 
 	    	multiple:false, title: "Fan Motor On-Off Control device", required: true
 		}
-		section("Optional Settings (Fan Speed, Timers, Motion, etc)") {
+		section("Optional Settings (Diff Temp, Timers, Motion, etc)") {
 			href (name: "optionsPage", 
         	title: "Configure Optional settings", 
         	description: none,
@@ -81,17 +81,17 @@ def mainPage() {
         	page: "optionsPage"
         	)
         }
-	section("Version Info, User's Guide") {
+		section("Version Info, User's Guide") {
 // VERSION
-       href (name: "aboutPage", 
-       title: "Evap Cooler Thermostat \n"+"Version: 1.0.160628 \n"+"Copyright © 2016 Dale Coffing", 
-       description: "Tap to get user's guide.",
-       image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/evap-cooler-thermostat.src/ect250x250.png",
-       required: false,
-       page: "aboutPage"
- 	   )
-   	}	
-    }
+			href (name: "aboutPage", 
+            title: "Evap Cooler Thermostat \n"+"Version: 1.0.160628 \n"+"Copyright © 2016 Dale Coffing",
+            description: "Tap to get user's guide.",
+            image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/evap-cooler-thermostat.src/ect250x250.png",
+            required: false,
+            page: "aboutPage"
+			)
+   		}	
+  	}
 }
 
 def optionsPage() {
