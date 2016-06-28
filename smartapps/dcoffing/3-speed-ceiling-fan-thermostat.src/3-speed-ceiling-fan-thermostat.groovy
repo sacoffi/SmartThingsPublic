@@ -8,7 +8,8 @@
    such as the GE 12730 or Leviton VRF01-1LX
    
   Change Log
-  2016-06-28 added submitOnChange for motion so to skip minutes input next if no motion selected
+  2016-06-28 x.1 version update
+  			added submitOnChange for motion so to skip minutes input next if no motion selected
  			changed order of inputs for better logic flow
             added separate input page for Configuring Settings to reduce clutter on required inputs
             change to other mode techinque to see if it will force a reevaluate of methods
@@ -92,7 +93,7 @@ def mainPage() {
         section("Version Info, User's Guide") {
 // VERSION
 			href (name: "aboutPage", 
-			title: "3 Speed Ceiling Fan Thermostat \n"+"Version:1.0.160628 \n"+"Copyright © 2016 Dale Coffing", 
+			title: "3 Speed Ceiling Fan Thermostat \n"+"Version:1.1.160628 \n"+"Copyright © 2016 Dale Coffing", 
 			description: "Tap to get user's guide.",
 			image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-speed-ceiling-fan-thermostat.src/3scft125x125.png",
 			required: false,
