@@ -50,8 +50,8 @@ definition(
 
 preferences {
 	page(name: "mainPage")
-    page(name: "optionsPage")
-    page(name: "aboutPage")
+	page(name: "optionsPage")
+	page(name: "aboutPage")
 }
 
 def mainPage() {
@@ -59,33 +59,33 @@ def mainPage() {
    	
     	section("Select a room temperature sensor to control the Evap Cooler..."){
 			input "tempSensor", "capability.temperatureMeasurement",
-        	multiple:false, title: "Temperature Sensor", required: true 
+			multiple:false, title: "Temperature Sensor", required: true 
 		}
     	section("Enter the desired room temperature (ie 72.5)..."){
 			input "setpoint", "decimal", title: "Room Setpoint Temp", required: true
 		}
     	section("Select the Evap Cooler fan motor switch hardware..."){
 			input "fanMotor", "capability.switch", 
-	    	multiple:false, title: "Fan Motor On-Off Control device", required: true
+			multiple:false, title: "Fan Motor On-Off Control device", required: true
 		}
-		section("Optional Settings (Fan Speed, Timers, Motion, etc)") {
-			href (name: "optionsPage", 
-        	title: "Configure Optional settings", 
-        	description: none,
-        	image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/evap-cooler-thermostat.src/settings250x250.png",
-        	required: false,
-        	page: "optionsPage"
+	section("Optional Settings (Fan Speed, Timers, Motion, etc)") {
+		href (name: "optionsPage",
+		title: "Configure Optional settings",
+		description: none,
+		image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/evap-cooler-thermostat.src/settings250x250.png",
+		required: false,
+		page: "optionsPage"
         	)
         }
 	section("Version Info, User's Guide") {
 // VERSION
-       href (name: "aboutPage", 
-       title: "Evap Cooler Thermostat \n"+"Version: 1.0.160628 \n"+"Copyright © 2016 Dale Coffing", 
-       description: "Tap to get user's guide.",
-       image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/evap-cooler-thermostat.src/ect250x250.png",
-       required: false,
-       page: "aboutPage"
- 	   )
+		href (name: "aboutPage",
+		title: "Evap Cooler Thermostat \n"+"Version: 1.0.160628 \n"+"Copyright © 2016 Dale Coffing", 
+		description: "Tap to get user's guide.",
+		image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/evap-cooler-thermostat.src/ect250x250.png",
+		required: false,
+		page: "aboutPage"
+		)
    	}	
     }
 }
@@ -101,29 +101,29 @@ def optionsPage() {
 		section("Enter the desired differential temp between fan speeds (default=1.0)..."){
 			input "fanDiffTempString", "enum", title: "Fan Differential Temp", options: ["0.5","1.0","1.5","2.0"], required: false
 		}
-        
-        section("Select the Evap Cooler pump switch hardware..."){
-			input "fanPump", "capability.switch", 
-	    	multiple:false, title: "Fan Pump On-Off Control device", required: false
+		
+		section("Select the Evap Cooler pump switch hardware..."){
+			input "fanPump", "capability.switch",
+			multiple:false, title: "Fan Pump On-Off Control device", required: false
 		}
-    	section("Enter the desired minutes to delay start of fan to allow for wetting of pads. (default=2.0)..."){
+		
+		section("Enter the desired minutes to delay start of fan to allow for wetting of pads. (default=2.0)..."){
 			input "fanDelayOnString", "enum", title: "Fan Delay On Timer", options: ["0.0","0.5","1.0","1.5","2.0","2.5"], required: false
 		}
 		section("Enable Evap Cooler thermostat only if motion is detected at (optional, leave blank to not require motion)..."){
 			input "motionSensor", "capability.motionSensor", title: "Select Motion device", required: false, submitOnChange: true
 		}
-        
-        if (motionSensor) {
+		if (motionSensor) {
 			section("Turn off Evap Cooler when there's been no motion detected for..."){
 				input "minutesNoMotion", "number", title: "Minutes?", required: true
 			}
-        }
+		}
 		
-        section("Select Evap Cooler operating mode desired (default to 'YES-Auto'..."){
+		section("Select Evap Cooler operating mode desired (default to 'YES-Auto'..."){
 			input "autoMode", "enum", title: "Enable Evap Cooler Thermostat?", options: ["NO-Manual","YES-Auto"], required: false
 		}
-        
-        section ("Change SmartApp name, Mode selector") {
+		
+		section ("Change SmartApp name, Mode selector") {
 			label title: "Assign a name", required: false
 			mode title: "Set for specific mode(s)", required: false
 		}
@@ -148,7 +148,7 @@ def updated() {
 	log.debug "def UPDATED with settings: ${settings}"
 	unsubscribe()
 	initialize()
-    handleTemperature(tempSensor.currentTemperature) //call handleTemperature to bypass temperatureHandler method 
+	handleTemperature(tempSensor.currentTemperature) //call handleTemperature to bypass temperatureHandler method 
 } 
 
 def initialize() {
@@ -160,8 +160,8 @@ def initialize() {
 }
                                    //Event Handler Methods                     
 def temperatureHandler(evt) {
-	log.debug "temperatureHandler called: $evt"	
-    handleTemperature(evt.doubleValue)
+	log.debug "temperatureHandler called: $evt"
+	handleTemperature(evt.doubleValue)
 	log.debug "temperatureHandler evt.doubleValue : $evt"
 }
 
@@ -199,7 +199,7 @@ def motionHandler(evt) {
 			}
 		}
 		else {
-     	    fanMotor.off()
+			fanMotor.off()
 			fanPump.off()
 			fanSpeed.off()
 		}
@@ -239,8 +239,8 @@ private tempCheck(currentTemp, desiredTemp)
        		case { it >= LowDiff }:
             	// turn on fan low speed
             	if (fanMotor.currentSwitch == "off") {		// if fan is OFF turn everything on 
-					fanSpeed.off()						// set fan Lo speed
-					fanPump.on()							// set water pump on 
+			fanSpeed.off()						// set fan Lo speed
+			fanPump.on()							// set water pump on 
             		fanMotor.on([delay: (fanDelayOnValue*60*1000)])			// delay starting fan to allow pump to wet pads 
                 	
                 	log.debug "Fan Lo speed in fanDelayOn min (CT=$currentTemp, SP=$desiredTemp,  LowDiff=$LowDiff)"
@@ -253,8 +253,8 @@ private tempCheck(currentTemp, desiredTemp)
             	// check to see if fan should be turned off
             	if (desiredTemp - currentTemp >= 0 ) {	//below or equal to setpoint, turn off fan, 
             		fanMotor.off()
-					fanPump.off()
-					fanSpeed.off()
+			fanPump.off()
+			fanSpeed.off()
             		log.debug "below SP+Diff=fan OFF (CT=$currentTemp, SP=$desiredTemp, FD=$fanMotor.currentSwitch, autoMode=$autoMode,)"
 				} 
                 log.debug "autoMode YES-MANUAL? else OFF(CT=$currentTemp, SP=$desiredTemp, FD=$fanMotor.currentSwitch, autoMode=$autoMode,)"
