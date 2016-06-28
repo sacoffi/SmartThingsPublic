@@ -16,12 +16,12 @@
     
   Change Log
   2016-06-28 x.1 version update
-  			added submitOnChange for motion so to skip minutes input next if no motion selected
- 			changed order of inputs for better logic flow
-            added separate input page for only advanced options
-            fixed bug in High Speed startup assuming fan/pump was already running
-            renamed fanHiSpeed to fanSpeed for more generic use, added 0.0 on timer selection
-            changed motion detector minutes input only if motion selected submitOnChange
+  	added submitOnChange for motion so to skip minutes input next if no motion selected
+ 	changed order of inputs for better logic flow
+        added separate input page for only advanced options
+        fixed bug in High Speed startup assuming fan/pump was already running
+        renamed fanHiSpeed to fanSpeed for more generic use, added 0.0 on timer selection
+        changed motion detector minutes input only if motion selected submitOnChange
   2016-06-22e added single speed default
   2016-06-22d change user guide content
   2016-06-22c modified icon to fan style, breeze style for comparison
@@ -29,11 +29,6 @@
   2016-06-22 added icons
   2016-06-21 modify 3-speed-ceiling-fan-thermostat code for outlets
 
-  
-  Known Behavior from original Virtual Thermostat code
-  -(fixed) when SP is updated, temp control isn't evaluated immediately, an event must trigger like change in temp, motion
-  - if load is previously running when smartapp is loaded, it isn't evaluated immediately to turn off when SP>CT
- 
    Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
    in compliance with the License. You may obtain a copy of the License at: www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
