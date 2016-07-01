@@ -1,6 +1,6 @@
 /*
    Virtual Thermostat for 3 Speed Ceiling Fan Control
-   Copyright 2016 Dale Coffing
+   Copyright 2016 SmartThings, Dale Coffing
    
    This smartapp provides automatic control of Low, Medium, High speeds of a ceiling fan using 
    any temperature sensor with optional motion override. 
@@ -8,6 +8,7 @@
    such as the GE 12730 or Leviton VRF01-1LX
    
   Change Log
+  2016-06-30 added dynamic temperature display on temperature setpoint input text
   2016-06-28 x.1 version update
   			added submitOnChange for motion so to skip minutes input next if no motion selected
  			changed order of inputs for better logic flow
@@ -37,9 +38,10 @@
   2016-5-4b cleaned debug logs, removed heat-cool selection, removed multiple stages
   2016-5-3  fixed error on not shutting down, huge shout out to my bro Stephen Coffing in the logic formation 
   
-  Known Behavior from original Virtual Thermostat code
-  -(fixed) when SP is updated, temp control isn't evaluated immediately, an event must trigger like change in temp, motion
-  - if load is previously running when smartapp is loaded, it isn't evaluated immediately to turn off when SP>CT
+  I modified the SmartThngs original Virtual Thermostat code which is buggy. Known issues
+  -[Fixed] when SP is updated, temp control isn't evaluated immediately, an event must trigger like change in temp, motion
+  - if load is previously running when smartapp is loaded, it isn't evaluated immediately to turn off when SetPt>CurrTemp
+  - temperature control is not evaluated when making a mode change, have to wait for something to change like temp
  
   Thanks to @krlaframboise, @MikeMaxwell for help in solving issues for a first time coder. @MichaelS for icon background
  
@@ -69,14 +71,19 @@ preferences {
 
 def mainPage() {
 	dynamicPage(name: "mainPage", title: "Select your devices and settings", install: true, uninstall: true) {
-   	
-    	section("Select a temperature sensor to control the fan...") {
-			input "tempSensor", "capability.temperatureMeasurement",
-        	multiple:false, title: "Temperature Sensor", required: true 
+    
+        section("Select a room temperature sensor to control the fan..."){
+			input "tempSensor", "capability.temperatureMeasurement", multiple:false, title: "Temperature Sensor", required: true, submitOnChange: true  
 		}
-        section("Enter the desired room temperature (ie 72.5)...") {
-			input "setpoint", "decimal", title: "Room Setpoint Temp", required: true
-		}
+        if (tempSensor) {  //protects from a null error
+    		section("Enter the desired room temperature setpoint...\n" + "NOTE: ${tempSensor.displayName} room temp is ${tempSensor.currentTemperature}° currently"){
+        		input "setpoint", "decimal", title: "Room Setpoint Temp", defaultValue: tempSensor.currentTemperature, required: true
+    		}
+        }
+        else 
+        	section("Enter the desired room temperature setpoint..."){
+        		input "setpoint", "decimal", title: "Room Setpoint Temp", required: true
+    		}       
         section("Select the ceiling fan control hardware..."){
 			input "fanDimmer", "capability.switchLevel", 
 	    	multiple:false, title: "Fan Control device", required: true
@@ -93,7 +100,7 @@ def mainPage() {
         section("Version Info, User's Guide") {
 // VERSION
 			href (name: "aboutPage", 
-			title: "3 Speed Ceiling Fan Thermostat \n"+"Version:1.1.160628 \n"+"Copyright © 2016 Dale Coffing", 
+			title: "3 Speed Ceiling Fan Thermostat \n"+"Version:1.1.160630 \n"+"Copyright © 2016 Dale Coffing", 
 			description: "Tap to get user's guide.",
 			image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/3-speed-ceiling-fan-thermostat.src/3scft125x125.png",
 			required: false,
