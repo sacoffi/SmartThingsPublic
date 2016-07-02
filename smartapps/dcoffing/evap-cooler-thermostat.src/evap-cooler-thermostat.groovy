@@ -18,12 +18,12 @@
   2016-07-01 changed user select mode method, changed default delay-on to 1.5
   2016-06-30 added dynamic temperature display readout to Room Setpoint Temp input for ease of troubleshooting
   2016-06-28 x.1 version update
-  			added submitOnChange for motion so to skip minutes input next if no motion selected
- 			changed order of inputs for better logic flow
-            added separate input page for only advanced options
-            fixed bug in High Speed startup assuming fan/pump was already running
-            renamed fanHiSpeed to fanSpeed for more generic use, added 0.0 on timer selection
-            changed motion detector minutes input only if motion selected submitOnChange
+  	added submitOnChange for motion so to skip minutes input next if no motion selected
+	changed order of inputs for better logic flow
+	added separate input page for only advanced options
+	fixed bug in High Speed startup assuming fan/pump was already running
+	renamed fanHiSpeed to fanSpeed for more generic use, added 0.0 on timer selection
+	changed motion detector minutes input only if motion selected submitOnChange
   2016-06-22e added single speed default
   2016-06-22d change user guide content
   2016-06-22c modified icon to fan style, breeze style for comparison
