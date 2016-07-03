@@ -47,7 +47,7 @@
 */
 
 definition(
-    name: "Evap Cooler Thermostat TEST",
+    name: "Evap Cooler Thermostat",
     namespace: "dcoffing",
     author: "Dale Coffing, SmartThings",
     description: "Automatic control for an Evaporative Cooler with a 2-speed motor, water pump and any temp sensor.",
