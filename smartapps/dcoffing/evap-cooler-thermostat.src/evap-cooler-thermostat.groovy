@@ -15,20 +15,22 @@
    or Monoprice #11989 Z-Wave In-Wall On/Off module
     
   Change Log
+  2016-07-02b. fixed mode bug not by changing technique, cleaned up code with shutdownEvap() 
+  	a. modify dynamic feedback of inputs to be via paragraph technique
   2016-07-01 changed user select mode method, changed default delay-on to 1.5
   2016-06-30 added dynamic temperature display readout to Room Setpoint Temp input for ease of troubleshooting
   2016-06-28 x.1 version update
-  	added submitOnChange for motion so to skip minutes input next if no motion selected
-	changed order of inputs for better logic flow
-	added separate input page for only advanced options
-	fixed bug in High Speed startup assuming fan/pump was already running
-	renamed fanHiSpeed to fanSpeed for more generic use, added 0.0 on timer selection
-	changed motion detector minutes input only if motion selected submitOnChange
+  	f. added submitOnChange for motion so to skip minutes input next if no motion selected
+	e. changed order of inputs for better logic flow
+	d. added separate input page for only advanced options
+	c. fixed bug in High Speed startup assuming fan/pump was already running
+	b. renamed fanHiSpeed to fanSpeed for more generic use, added 0.0 on timer selection
+	a. changed motion detector minutes input only if motion selected submitOnChange
   2016-06-22e added single speed default
-  2016-06-22d change user guide content
-  2016-06-22c modified icon to fan style, breeze style for comparison
-  2016-06-22b moved pump input to first position (required), made other selections not required	for those with single speed motor
-  2016-06-22 added icons
+	d. change user guide content
+	c. modified icon to fan style, breeze style for comparison
+	b. moved pump input to first position (required), made other selections not required	for those with single speed motor
+    a. added icons
   2016-06-21 modify 3-speed-ceiling-fan-thermostat code for outlets
 
   
@@ -45,7 +47,7 @@
 */
 
 definition(
-    name: "Evap Cooler Thermostat",
+    name: "Evap Cooler Thermostat TEST",
     namespace: "dcoffing",
     author: "Dale Coffing, SmartThings",
     description: "Automatic control for an Evaporative Cooler with a 2-speed motor, water pump and any temp sensor.",
@@ -63,24 +65,35 @@ preferences {
 
 def mainPage() {
 	dynamicPage(name: "mainPage", title: "Select your devices and settings", install: true, uninstall: true){
-   	
-    	section("Select a room temperature sensor to control the Evap Cooler..."){
+
+		section("Select the Evap Cooler fan motor switch hardware..."){
+			input "fanMotor", "capability.switch", 
+	    	multiple:false, title: "Fan Motor On-Off Control device", required: true, submitOnChange: true  
+		}   	
+  
+        section("Select a room temperature sensor to control the Evap Cooler..."){
 			input "tempSensor", "capability.temperatureMeasurement", multiple:false, title: "Temperature Sensor", required: true, submitOnChange: true  
 		}
-        if (tempSensor) {  //protects from a null error
-    		section("Enter the desired room temperature setpoint...\n" + "NOTE: ${tempSensor.displayName} room temp is ${tempSensor.currentTemperature}° currently"){
-        		input "setpoint", "decimal", title: "Room Setpoint Temp", defaultValue: tempSensor.currentTemperature, required: true
-    		}
-        }
-        else 
-        	section("Enter the desired room temperature setpoint..."){
-        		input "setpoint", "decimal", title: "Room Setpoint Temp", required: true
-    		} 	 
+        
+        section("Enter the desired room temperature setpoint..."){
+        	input "setpoint", "decimal", title: "Room Setpoint Temp", required: true
+    	} 	 
 
-    	section("Select the Evap Cooler fan motor switch hardware..."){
-			input "fanMotor", "capability.switch", 
-	    	multiple:false, title: "Fan Motor On-Off Control device", required: true
-		}
+		section("Current Conditions are"){
+        if (fanMotor) {  
+    		paragraph ("${fanMotor.displayName} is ${fanMotor.currentSwitch}")
+            }
+        if (tempSensor) {  
+    		paragraph ("${tempSensor.displayName} room temp is ${tempSensor.currentTemperature}° ")
+            }
+        if (fanPump) {  
+    		paragraph ("${fanPump.displayName} is ${fanPump.currentSwitch} ")
+			} 
+        if (fanSpeed) {  
+    		paragraph ("${fanSpeed.displayName} is ${fanSpeed.currentSwitch} ")
+			}    
+    	}
+	
 		section("Optional Settings (Fan Speed, Timers, Motion, etc)") {
 			href (name: "optionsPage", 
         	title: "Configure Optional settings", 
@@ -93,8 +106,8 @@ def mainPage() {
 // VERSION
 		section("Version Info, User's Guide") {
 			href (name: "aboutPage", 
-            title: "Evap Cooler Thermostat \n"+"Version: 1.0.160701 \n"+"Copyright © 2016 Dale Coffing", 
-            description: "Tap to get user's guide.",
+            title: "Evap Cooler Thermostat \n"+"Version: 1.0.160702c \n"+"Copyright © 2016 Dale Coffing", 
+            description: "Tap to access user's guide.",
             image: "https://raw.githubusercontent.com/dcoffing/SmartThingsPublic/master/smartapps/dcoffing/evap-cooler-thermostat.src/ect250x250.png",
             required: false,
             page: "aboutPage"
@@ -108,7 +121,7 @@ def optionsPage() {
     
 		section("Select the Evap Cooler Fan Speed switch control hardware (optional, leave blank for single speed)...."){
 			input "fanSpeed", "capability.switch", 
-	    	multiple:false, title: "Fan Hi-Lo Speed Control device", required: false
+	    	multiple:false, title: "Fan Hi-Lo Speed Control device", required: false, submitOnChange: true  
 		}
 
 		section("Enter the desired differential temp between fan speeds (default=1.0)..."){
@@ -117,7 +130,7 @@ def optionsPage() {
         
         section("Select the Evap Cooler pump switch hardware..."){
 			input "fanPump", "capability.switch", 
-	    	multiple:false, title: "Fan Pump On-Off Control device", required: false
+	    	multiple:false, title: "Fan Pump On-Off Control device", required: false, submitOnChange: true  
 		}
     	section("Enter the desired minutes to delay start of fan to allow for wetting of pads. (default=1.5)..."){
 			input "fanDelayOnString", "enum", title: "Fan Delay On Timer", options: ["0.0","0.5","1.0","1.5","2.0","2.5"], required: false
@@ -136,13 +149,12 @@ def optionsPage() {
 			input "autoMode", "enum", title: "Enable Evap Cooler Thermostat?", options: ["NO-Manual","YES-Auto"], required: false
 		}
         
-        section ("Change SmartApp name, Mode selector") {
+      section ("Change SmartApp name, Mode selector") {
 			label title: "Assign a name", required: false
-            mode(title: "Set for specific mode(s)") 
-//			mode title: "Set for specific mode(s)", required: false
-		}
-        	
- 	}
+//          mode(title: "Set for specific mode(s)"), required: false  //this technique for User mode fails for this smartapp
+            input "selectedModes", "mode", title:  "Select specific mode(s) to run (default is ALL modes)", multiple: true, required: false
+			}      	
+	}
   }
 
 def aboutPage() {
@@ -172,7 +184,14 @@ def initialize() {
 		subscribe(motionSensor, "motion", motionHandler) //call the motionHandler method when there is any reported change to the "motion" attribute
 	}   
 }
-                                   //Event Handler Methods                     
+
+def shutdownEvap() {
+	fanMotor.off()
+	fanPump.off()
+	fanSpeed.off()
+}
+
+//Event Handler Methods                     
 def temperatureHandler(evt) {
 	log.debug "temperatureHandler called: $evt"	
     handleTemperature(evt.doubleValue)
@@ -188,11 +207,9 @@ def handleTemperature(temp) {		//
 		log.debug "handleTemperature ISACTIVE($isActive)"
 	}
 	else {
-     	fanMotor.off()
-		fanPump.off()
-		fanSpeed.off()
+     	shutdownEvap()
  	}
-}
+}    
 
 def motionHandler(evt) {
 	if (evt.value == "active") {
@@ -213,15 +230,13 @@ def motionHandler(evt) {
 			}
 		}
 		else {
-     	    fanMotor.off()
-			fanPump.off()
-			fanSpeed.off()
+     	    shutdownEvap()
 		}
 	}
 }
 
-private tempCheck(currentTemp, desiredTemp)
-{
+private tempCheck(currentTemp, desiredTemp) {
+
 	log.debug "TEMPCHECK#1(CT=$currentTemp, SP=$desiredTemp, FM=$fanMotor.currentSwitch, automode=$autoMode, FDTstring=$fanDiffTempString, FDTvalue=$fanDiffTempValue)"
     
     //convert Fan Delay On input enum string to number value and if user doesn't select a Fan Delay On value, then default to 1.5 
@@ -237,7 +252,12 @@ private tempCheck(currentTemp, desiredTemp)
     def HighDiff = fanDiffTempValue*2
 
 	log.debug "TEMPCHECK#2(CT=$currentTemp, SP=$desiredTemp, FM=$fanMotor.currentSwitch, automode=$autoMode, FDTstring=$fanDiffTempString, FDTvalue=$fanDiffTempValue)"
-	if (autoModeValue == "YES-Auto") {
+	
+
+if (currentModeAllowed(settings.selectedModes)) {
+	// Executes if current ST mode matches one of the user selected modes.
+     
+    if (autoModeValue == "YES-Auto") {
     	switch (currentTemp - desiredTemp) {
         	case { it  >= HighDiff }:
         		// turn on fan high speed
@@ -258,26 +278,32 @@ private tempCheck(currentTemp, desiredTemp)
             		fanMotor.on([delay: (fanDelayOnValue*60*1000)])			// delay starting fan to allow pump to wet pads 
                 	
                 	log.debug "Fan Lo speed in fanDelayOn min (CT=$currentTemp, SP=$desiredTemp,  LowDiff=$LowDiff)"
-          		} else {
+          		} 
+                else {
                 	fanSpeed.off()	//fan is already running, set Low speed immediately
-            		}
+            	}
             	log.debug "LO speed skip pump (CT=$currentTemp, SP=$desiredTemp,  LowDiff=$LowDiff)"
                 break
 		default:
             	// check to see if fan should be turned off
             	if (desiredTemp - currentTemp >= 0 ) {	//below or equal to setpoint, turn off fan, 
-            		fanMotor.off()
-					fanPump.off()
-					fanSpeed.off()
+            		shutdownEvap()
             		log.debug "below SP+Diff=fan OFF (CT=$currentTemp, SP=$desiredTemp, FD=$fanMotor.currentSwitch, autoMode=$autoMode,)"
 				} 
                 log.debug "autoMode YES-MANUAL? else OFF(CT=$currentTemp, SP=$desiredTemp, FD=$fanMotor.currentSwitch, autoMode=$autoMode,)"
         }	
-	}	
+	}
+
+}
+else {
+	shutdownEvap()
+	}
+}
+def currentModeAllowed(allowedModes) {
+    return (!allowedModes || allowedModes?.find{it == location.mode}) 
 }
 
-private hasBeenRecentMotion()
-{
+private hasBeenRecentMotion() {
 	def isActive = false
 	if (motionSensor && minutesNoMotion) {
 		def deltaMinutes = minutesNoMotion as Long
@@ -308,4 +334,4 @@ private def textHelp() {
    " pump and fan speed then Enerwave ZWN-RSM2 dual 10amp relays to control pump and the second relay"+
    " to control hi-lo speed via Omoron LY1F SPDT 15amp relay. For only pump control any single switch could"+
    " work like the Enerwave ZWN-RSM1S or Monoprice #11989 Z-Wave In-Wall On/Off module"
-	}
+}
