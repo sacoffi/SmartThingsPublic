@@ -17,7 +17,8 @@
   Change Log
   2016-07-02b. fixed mode bug not shutting of evap by changing mode technique, cleaned up code with shutdownEvap() 
   	a. modify dynamic feedback of inputs to be via paragraph technique
-  2016-07-01 changed user select mode method, changed default delay-on to 1.5
+  2016-07-01 changed user select mode method, changed default delay-on to 1.5, removed the default setpoint because
+  			ST still requires the user to make a change to get around Required input flag.
   2016-06-30 added dynamic temperature display readout to Room Setpoint Temp input for ease of troubleshooting
   2016-06-28 x.1 version update
   	f. added submitOnChange for motion so to skip minutes input next if no motion selected
@@ -60,7 +61,7 @@ definition(
 preferences {
 	page(name: "mainPage", title: "")
     page(name: "optionsPage", title: "")
-    page(name: "aboutPage", title: "About")
+    page(name: "aboutPage", title: "")
 }
 
 def mainPage() {
@@ -79,7 +80,7 @@ def mainPage() {
         	input "setpoint", "decimal", title: "Room Setpoint Temp", required: true
     	} 	 
 
-		section("Current Conditions are"){
+		section("Current Conditions are"){	//The 'if' statements used below prevent null error crash
         if (fanMotor) {  
     		paragraph ("${fanMotor.displayName} is ${fanMotor.currentSwitch}")
             }
@@ -159,7 +160,7 @@ def optionsPage() {
 
 def aboutPage() {
 	dynamicPage(name: "aboutPage", title: none, install: true, uninstall: true) {
-     	section("User's Guide; Evap Cooler Thermostat") {
+     	section("User's Guide for Evap Cooler Thermostat") {
         	paragraph textHelp()
  		}
 	}
@@ -180,7 +181,8 @@ def updated() {
 def initialize() {
 	log.debug "def INITIALIZE with settings: ${settings}"
 	subscribe(tempSensor, "temperature", temperatureHandler) //call temperatureHandler method when any reported change to "temperature" attribute
-	if (motionSensor) {
+	subscribe(location, "mode", modeChangedHandler) //call modeChangedHandler with any reported change to "mode" change attribute 
+    if (motionSensor) {
 		subscribe(motionSensor, "motion", motionHandler) //call the motionHandler method when there is any reported change to the "motion" attribute
 	}   
 }
@@ -191,7 +193,6 @@ def shutdownEvap() {
 	fanSpeed.off()
 }
 
-//Event Handler Methods                     
 def temperatureHandler(evt) {
 	log.debug "temperatureHandler called: $evt"	
     handleTemperature(evt.doubleValue)
@@ -295,10 +296,11 @@ if (currentModeAllowed(settings.selectedModes)) {
 	}
 
 }
-else {
+else {			// if current ST mode does NOT match one of the user selected modes.
 	shutdownEvap()
 	}
 }
+
 def currentModeAllowed(allowedModes) {
     return (!allowedModes || allowedModes?.find{it == location.mode}) 
 }
@@ -333,5 +335,8 @@ private def textHelp() {
    " You might consider using a Remotec ZFM-80 15amp relay for fan motor on-off, if you desire both"+
    " pump and fan speed then Enerwave ZWN-RSM2 dual 10amp relays to control pump and the second relay"+
    " to control hi-lo speed via Omoron LY1F SPDT 15amp relay. For only pump control any single switch could"+
-   " work like the Enerwave ZWN-RSM1S or Monoprice #11989 Z-Wave In-Wall On/Off module"
+   " work like the Enerwave ZWN-RSM1S or Monoprice #11989 Z-Wave In-Wall On/Off module. \n\n"+
+   
+   " To uninstall the smartapp simply click REMOVE below"  
+   
 }
