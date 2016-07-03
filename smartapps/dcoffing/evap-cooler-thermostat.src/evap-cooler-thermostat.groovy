@@ -1,5 +1,5 @@
 /*
-   Virtual Thermostat for Evaporative Coolers 
+   Virtual Thermostat for Evaporative Coolers .
    Copyright 2016 Dale Coffing, SmartThings
    
    This smartapp provides automatic control for Evaporative Coolers (single or two-speed) using 
@@ -15,7 +15,7 @@
    or Monoprice #11989 Z-Wave In-Wall On/Off module
     
   Change Log
-  2016-07-02b. fixed mode bug not by changing technique, cleaned up code with shutdownEvap() 
+  2016-07-02b. fixed mode bug not shutting of evap by changing mode technique, cleaned up code with shutdownEvap() 
   	a. modify dynamic feedback of inputs to be via paragraph technique
   2016-07-01 changed user select mode method, changed default delay-on to 1.5
   2016-06-30 added dynamic temperature display readout to Room Setpoint Temp input for ease of troubleshooting
@@ -47,7 +47,7 @@
 */
 
 definition(
-    name: "Evap Cooler Thermostat",
+    name: "Evap. Cooler Thermostat",
     namespace: "dcoffing",
     author: "Dale Coffing, SmartThings",
     description: "Automatic control for an Evaporative Cooler with a 2-speed motor, water pump and any temp sensor.",
